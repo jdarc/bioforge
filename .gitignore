@@ -1,3 +1,14 @@
+# Intellij
+.idea/
+*.iml
+*.iws
+out
+
+# Mac
+.DS_Store
+Icon
+
+# Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -7,3 +18,6 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+# Custom
+tanks/
