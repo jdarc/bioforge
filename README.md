@@ -16,26 +16,31 @@ Ensure you have successfully compiled the project before running the demonstrati
 > mvn compile
 
 ### Circles
+![](http://www.zynaps.com/img/circles.png)
 > mvn exec:exec -Dcircles
 
 This demonstration creates a landscape of small circles and then attempts to find the largest circle that can fit amongst them without overlap. Press **R** to reset the demo or resize the window to make the environment smaller and more crowded.
 
 ### Equations
+![](http://www.zynaps.com/img/equations.png)
 > mvn exec:exec -Dequations
 
 This demonstration attempts to find the best way to arrange a formula of numbers to achieve a target value. There are two sets of numbers, a large set [25, 50, 75, 100] and a small set [1..10]. The target value is a whole number randomly chosen from the range [1..999], and the basic mathematical operators are used, namely +, -, * and /. The challenge here is to find a solution which uses **ALL** the numbers!
 
 ### Packman
+![](http://www.zynaps.com/img/packman.png)
 > mvn exec:exec -Dpackman
 
 This demonstration first generates a convex polygon and then attempts to fill this polygon with 10 non overlapping circles whilst maximizing polygon coverage. Press **R** to reset the demo and generate a new convex polygon.
 
 ### Rostering
+![](http://www.zynaps.com/img/rostering.png)
 > mvn exec:exec -Drostering
 
 This demonstration attempts to find an optimal solution to what is known as the nurse rostering problem, albeit with a vastly more simplified domain model of employees, shifts and abscense and a small handful of constraints.
 
 ### Worms
+![](http://www.zynaps.com/img/worms.png)
 > mvn exec:exec -Dworms
 
 A demonstration of Genetic Programming and emergent behaviour. This experiment attempts to evolve worm like creatures that navigate a procedurally generated 2D world, using cellular automata, avoiding obstacles whilst searching for food.
