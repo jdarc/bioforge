@@ -14,6 +14,7 @@ Licensed under the Apache 2.0 License.
 ## Demos
 Ensure you have successfully compiled the project before running the demonstrations by executing:
 > mvn compile
+
 ### Circles
 > mvn exec:exec -Dcircles
 
