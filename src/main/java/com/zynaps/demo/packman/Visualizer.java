@@ -10,14 +10,13 @@ import java.util.ArrayList;
 
 class Visualizer extends JPanel {
 
-    private ArrayList<Drawable> drawables = new ArrayList<>();
+    private final ArrayList<Drawable> drawables = new ArrayList<>();
     private Color color = Color.BLACK;
-    private double scale = 50.0;
+    private final double scale = 50.0;
 
     Visualizer() {
         setBackground(new Color(250, 250, 250));
         setPreferredSize(new Dimension(1440, 900));
-        setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
     }
 
     @Override
@@ -156,7 +155,7 @@ class Visualizer extends JPanel {
         void draw(Graphics2D g);
     }
 
-    private class Text implements Drawable {
+    private static class Text implements Drawable {
 
         private final String msg;
         private final int x;
@@ -171,14 +170,14 @@ class Visualizer extends JPanel {
         @Override
         public void draw(Graphics2D g) {
             AffineTransform tx = g.getTransform();
-            g.setTransform(new AffineTransform());
+            g.setTransform(new AffineTransform(2, 0, 0, 2, 0, 0));
             g.setColor(Color.black);
             g.drawString(msg, x, y);
             g.setTransform(tx);
         }
     }
 
-    private class Wire implements Drawable {
+    private static class Wire implements Drawable {
 
         private final java.awt.Shape shape;
         private final Color color;
@@ -194,7 +193,7 @@ class Visualizer extends JPanel {
         }
     }
 
-    private class Solid implements Drawable {
+    private static class Solid implements Drawable {
 
         private final java.awt.Shape shape;
         private final Color color;

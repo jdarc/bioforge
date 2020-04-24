@@ -12,7 +12,7 @@ class Absence {
     public Absence(DateTime start, DateTime end) {
         this.start = start;
         this.end = end;
-        this.interval = new Interval(start, end);
+        interval = new Interval(start, end);
     }
 
     public boolean overlaps(Interval other) {

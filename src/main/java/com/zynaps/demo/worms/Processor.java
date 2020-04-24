@@ -23,11 +23,11 @@ class Processor {
     }
 
     public void load(int... code) {
-        System.arraycopy(code, 0, this.instructions, 0, code.length);
+        System.arraycopy(code, 0, instructions, 0, code.length);
         instructions[PROGRAM_SIZE - 1] = 0x0;
     }
 
-    public int run(int cycles) {
+    public void run(int cycles) {
         int pc = 0;
         int cycle = 0;
         while (cycle++ < cycles) {
@@ -39,7 +39,7 @@ class Processor {
             final int mem = (0xFFF & instruction);
             switch (opc) {
                 case 0:
-                    return cycle;
+                    return;
                 case 1:
                     pc = registers[opa] != 0.0 ? mem : pc;
                     break;
@@ -129,9 +129,8 @@ class Processor {
             }
             if (!Double.isFinite(registers[dst])) {
                 registers[dst] = 0.0;
-                return cycle;
+                return;
             }
         }
-        return cycle;
     }
 }

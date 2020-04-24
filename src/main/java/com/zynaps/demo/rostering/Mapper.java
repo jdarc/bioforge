@@ -7,11 +7,11 @@ import java.util.List;
 
 class Mapper {
 
+    public final int genomeLength;
     private final Schedule schedule;
     private final int allocs;
     private final int shiftBits;
     private final int employeeBits;
-    public final int genomeLength;
 
     public Mapper(Schedule schedule) {
         this.schedule = schedule;
@@ -21,6 +21,10 @@ class Mapper {
         genomeLength = allocs * (shiftBits + employeeBits);
     }
 
+    private static int bitsNeeded(int a) {
+        return (int) (Math.floor(Math.log(a) / Math.log(2.0)) + 1.0);
+    }
+
     public List<Assignment> decode(Creature creature) {
         final int step = shiftBits + employeeBits;
         final int shiftMask = (1 << shiftBits) - 1;
@@ -28,16 +32,12 @@ class Mapper {
         final ArrayList<Assignment> assignments = new ArrayList<>(allocs);
         for (int i = 0; i < allocs; ++i) {
             long strand = creature.extract(i * step, step);
-            Shift shift = schedule.getShiftById((int)(strand >>> employeeBits & shiftMask));
-            Employee employee = schedule.getEmployeeById((int)(strand & employeeMask));
+            Shift shift = schedule.getShiftById((int) (strand >>> employeeBits & shiftMask));
+            Employee employee = schedule.getEmployeeById((int) (strand & employeeMask));
             if (shift != Shift.NULL && employee != Employee.NULL) {
                 assignments.add(new Assignment(shift, employee));
             }
         }
         return assignments;
-    }
-
-    private static int bitsNeeded(int a) {
-        return (int)(Math.floor(Math.log(a) / Math.log(2.0)) + 1.0);
     }
 }

@@ -1,43 +1,103 @@
 package com.zynaps.demo.equations;
 
+import com.zynaps.bioforge.Builder;
+import com.zynaps.bioforge.Island;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.util.Arrays;
 import java.util.Random;
 
-class Game {
+import static java.lang.Double.parseDouble;
 
+class Game {
     private static final Random RANDOM = new Random(System.nanoTime());
     private static final int SHUFFLE_COUNT = 64;
+    private static final int TOTAL_NUMBERS = 6;
+    private final int[] numbers;
+    private final int target;
+    private ScriptEngine engine;
 
-    public final int target;
-    private int[] numbers;
+    public Game(int totalLarge) {
+        target = RANDOM.nextInt(998) + 1;
+        numbers = new int[TOTAL_NUMBERS];
 
-    public Game(int totalNumbers, int totalLarge, int minimumTarget, int maximumTarget) {
-        target = minimumTarget + RANDOM.nextInt(maximumTarget - minimumTarget);
-        numbers = new int[totalNumbers];
-        System.arraycopy(shuffle(25, 50, 75, 100), 0, numbers, 0, totalLarge);
-        System.arraycopy(shuffle(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), totalLarge, numbers, totalLarge, totalNumbers - totalLarge);
-    }
-
-    public int getTarget() {
-        return target;
-    }
-
-    public String getDescription() {
-        return "Numbers: " + Arrays.toString(numbers) + System.lineSeparator() + "Target: " + target;
-    }
-
-    public String mixFormula(Formula formula) {
-        return formula.toFormula(numbers);
+        selectLargeNumbers(clamp(totalLarge, 1, 4));
+        selectSmallNumbers(clamp(totalLarge, 1, 4));
     }
 
     private static int[] shuffle(int... numbers) {
-        for (int t = 0; t < SHUFFLE_COUNT; ++t) {
-            int i = RANDOM.nextInt(numbers.length);
-            int j = RANDOM.nextInt(numbers.length);
-            int temp = numbers[i];
-            numbers[i] = numbers[j];
-            numbers[j] = temp;
+        for (int times = 0; times < SHUFFLE_COUNT; ++times) {
+            swap(numbers, RANDOM.nextInt(numbers.length), RANDOM.nextInt(numbers.length));
         }
         return numbers;
+    }
+
+    private static void swap(int[] numbers, int i, int j) {
+        int temp = numbers[i];
+        numbers[i] = numbers[j];
+        numbers[j] = temp;
+    }
+
+    public static <T extends Comparable<T>> T clamp(T val, T min, T max) {
+        if (val.compareTo(min) < 0) return min;
+        if (val.compareTo(max) > 0) return max;
+        return val;
+    }
+
+    public String describe() {
+        return "Numbers: " + Arrays.toString(numbers) +
+                System.lineSeparator() +
+                "Target: " + target +
+                System.lineSeparator();
+    }
+
+    public void run() {
+        engine = new ScriptEngineManager().getEngineByName("JavaScript");
+
+        Island population = new Builder().tribes(4)
+                .populationSize(50)
+                .genomeSize(32)
+                .crossoverRate(0.5)
+                .mutationRate(0.005)
+                .build();
+
+        double lastResult = 0.0;
+        do {
+            population.evolve(creature -> {
+                Formula formula = new Formula(creature);
+                if (formula.isValid()) {
+                    return target - Math.abs(target - evaluate(formula.toEquation(numbers)));
+                }
+                return 0.0;
+            });
+
+            String formula = new Formula(population.getChampion()).toEquation(numbers);
+            double result = evaluate(formula);
+            if (lastResult != result) {
+                lastResult = result;
+                System.out.println(String.format("Generation [%d]: %s = %s", population.getGeneration(), formula, result));
+            }
+        } while (evaluate(new Formula(population.getChampion()).toEquation(numbers)) != target);
+
+        String formula = new Formula(population.getChampion()).toEquation(numbers);
+        System.out.println(String.format("Solution: %s = %s", formula, evaluate(formula)));
+    }
+
+    private double evaluate(String equation) {
+        try {
+            return parseDouble(engine.eval(equation).toString());
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void selectLargeNumbers(int totalLarge) {
+        System.arraycopy(shuffle(25, 50, 75, 100), 0, numbers, 0, totalLarge);
+    }
+
+    private void selectSmallNumbers(int totalLarge) {
+        System.arraycopy(shuffle(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 0, numbers, totalLarge, TOTAL_NUMBERS - totalLarge);
     }
 }

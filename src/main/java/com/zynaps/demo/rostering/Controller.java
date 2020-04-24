@@ -6,14 +6,12 @@ import java.util.List;
 
 class Controller {
 
-    private final Schedule schedule;
     private final Island population;
     private final Mapper mapper;
     private final Rules rules;
     private final int totalRequired;
 
     public Controller(Schedule schedule, Island population, Mapper mapper, Rules rules) {
-        this.schedule = schedule;
         this.population = population;
         this.mapper = mapper;
         this.rules = rules;
@@ -30,12 +28,12 @@ class Controller {
                 bestFitness = population.getChampion().getFitness();
                 solutionFound = mapper.decode(population.getChampion()).size() == totalRequired;
                 System.out.println(String.format("Mutation: %f, Crossover: %f, Generation: %d, Assignments: %d/%d, Score: %f",
-                                                 population.getMutationRate(),
-                                                 population.getCrossoverRate(),
-                                                 population.getGeneration(),
-                                                 mapper.decode(population.getChampion()).size(),
-                                                 totalRequired,
-                                                 population.getChampion().getFitness()));
+                        population.getMutationRate(),
+                        population.getCrossoverRate(),
+                        population.getGeneration(),
+                        mapper.decode(population.getChampion()).size(),
+                        totalRequired,
+                        population.getChampion().getFitness()));
             }
         }
         return mapper.decode(population.getChampion());

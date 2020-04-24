@@ -1,6 +1,7 @@
 package com.zynaps.bioforge;
 
 import com.zynaps.bioforge.generators.FastRandom;
+import com.zynaps.bioforge.generators.JavaRandom;
 import com.zynaps.bioforge.generators.RandomGenerator;
 import com.zynaps.bioforge.operators.BitFlipMutator;
 import com.zynaps.bioforge.operators.CrossoverOperator;
@@ -14,7 +15,7 @@ public class Builder {
     private CrossoverOperator crossoverOperator = new SpliceCrossover();
     private MutationOperator mutationOperator = new BitFlipMutator();
     private SelectionScheme scheme = new TournamentSelection(3);
-    private RandomGenerator random = new FastRandom();
+    private RandomGenerator random = new JavaRandom();
     private int tribes = 1;
     private int populationSize = 50;
     private int genomeSize = 64;
@@ -23,12 +24,12 @@ public class Builder {
     private boolean nuke = false;
 
     public Builder crossoverOperator(CrossoverOperator operator) {
-        this.crossoverOperator = operator;
+        crossoverOperator = operator;
         return this;
     }
 
     public Builder mutationOperator(MutationOperator operator) {
-        this.mutationOperator = operator;
+        mutationOperator = operator;
         return this;
     }
 
@@ -43,27 +44,27 @@ public class Builder {
     }
 
     public Builder tribes(int total) {
-        this.tribes = Math.max(1, total);
+        tribes = Math.max(1, total);
         return this;
     }
 
     public Builder populationSize(int size) {
-        this.populationSize = Math.max(2, size);
+        populationSize = Math.max(2, size);
         return this;
     }
 
     public Builder genomeSize(int size) {
-        this.genomeSize = Math.max(8, size);
+        genomeSize = Math.max(8, size);
         return this;
     }
 
     public Builder crossoverRate(double rate) {
-        this.crossoverRate = Math.max(0.0, Math.min(1.0, rate));
+        crossoverRate = Math.max(0.0, Math.min(1.0, rate));
         return this;
     }
 
     public Builder mutationRate(double rate) {
-        this.mutationRate = Math.max(0.0, Math.min(1.0, rate));
+        mutationRate = Math.max(0.0, Math.min(1.0, rate));
         return this;
     }
 

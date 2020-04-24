@@ -27,7 +27,7 @@ class Automata {
             smoothMap();
         }
 
-        drawCircle(new Coord(width >> 1, height >> 1), 5);
+        drawCircle(new Coordinate(width >> 1, height >> 1), 5);
 
         processMap();
 
@@ -48,22 +48,22 @@ class Automata {
     }
 
     private void processMap() {
-        List<List<Coord>> wallRegions = getRegions(1);
+        List<List<Coordinate>> wallRegions = getRegions(1);
         int wallThresholdSize = 50;
 
         wallRegions.stream().filter(wallRegion -> wallRegion.size() < wallThresholdSize).forEach(wallRegion -> {
-            for (Coord tile : wallRegion) {
+            for (Coordinate tile : wallRegion) {
                 map[tile.tileX][tile.tileY] = 0;
             }
         });
 
-        List<List<Coord>> roomRegions = getRegions(0);
+        List<List<Coordinate>> roomRegions = getRegions(0);
         int roomThresholdSize = 50;
         List<Room> survivingRooms = new ArrayList<>();
 
-        for (List<Coord> roomRegion : roomRegions) {
+        for (List<Coordinate> roomRegion : roomRegions) {
             if (roomRegion.size() < roomThresholdSize) {
-                for (Coord tile : roomRegion) {
+                for (Coordinate tile : roomRegion) {
                     map[tile.tileX][tile.tileY] = 1;
                 }
             } else {
@@ -99,8 +99,8 @@ class Automata {
         }
 
         int bestDistance = 0;
-        Coord bestTileA = new Coord(0, 0);
-        Coord bestTileB = new Coord(0, 0);
+        Coordinate bestTileA = new Coordinate(0, 0);
+        Coordinate bestTileB = new Coordinate(0, 0);
         Room bestRoomA = new Room();
         Room bestRoomB = new Room();
         boolean possibleConnectionFound = false;
@@ -120,9 +120,9 @@ class Automata {
 
                 for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.size(); tileIndexA++) {
                     for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.size(); tileIndexB++) {
-                        Coord tileA = roomA.edgeTiles.get(tileIndexA);
-                        Coord tileB = roomB.edgeTiles.get(tileIndexB);
-                        int distanceBetweenRooms = (int)(Math.pow(tileA.tileX - tileB.tileX, 2) + Math.pow(tileA.tileY - tileB.tileY, 2));
+                        Coordinate tileA = roomA.edgeTiles.get(tileIndexA);
+                        Coordinate tileB = roomB.edgeTiles.get(tileIndexB);
+                        int distanceBetweenRooms = (int) (Math.pow(tileA.tileX - tileB.tileX, 2) + Math.pow(tileA.tileY - tileB.tileY, 2));
 
                         if (distanceBetweenRooms < bestDistance || !possibleConnectionFound) {
                             bestDistance = distanceBetweenRooms;
@@ -150,15 +150,15 @@ class Automata {
         }
     }
 
-    private void createPassage(Room roomA, Room roomB, Coord tileA, Coord tileB) {
+    private void createPassage(Room roomA, Room roomB, Coordinate tileA, Coordinate tileB) {
         Room.ConnectRooms(roomA, roomB);
-        List<Coord> line = getLine(tileA, tileB);
-        for (Coord c : line) {
+        List<Coordinate> line = getLine(tileA, tileB);
+        for (Coordinate c : line) {
             drawCircle(c, 5);
         }
     }
 
-    private void drawCircle(Coord c, int r) {
+    private void drawCircle(Coordinate c, int r) {
         for (int x = -r; x <= r; x++) {
             for (int y = -r; y <= r; y++) {
                 if (x * x + y * y <= r * r) {
@@ -172,8 +172,8 @@ class Automata {
         }
     }
 
-    private List<Coord> getLine(Coord from, Coord to) {
-        List<Coord> line = new ArrayList<>();
+    private List<Coordinate> getLine(Coordinate from, Coordinate to) {
+        List<Coordinate> line = new ArrayList<>();
 
         int x = from.tileX;
         int y = from.tileY;
@@ -182,8 +182,8 @@ class Automata {
         int dy = to.tileY - from.tileY;
 
         boolean inverted = false;
-        int step = (int)Math.signum(dx);
-        int gradientStep = (int)Math.signum(dy);
+        int step = (int) Math.signum(dx);
+        int gradientStep = (int) Math.signum(dy);
 
         int longest = Math.abs(dx);
         int shortest = Math.abs(dy);
@@ -193,13 +193,13 @@ class Automata {
             longest = Math.abs(dy);
             shortest = Math.abs(dx);
 
-            step = (int)Math.signum(dy);
-            gradientStep = (int)Math.signum(dx);
+            step = (int) Math.signum(dy);
+            gradientStep = (int) Math.signum(dx);
         }
 
         int gradientAccumulation = longest / 2;
         for (int i = 0; i < longest; i++) {
-            line.add(new Coord(x, y));
+            line.add(new Coordinate(x, y));
 
             if (inverted) {
                 y += step;
@@ -221,17 +221,17 @@ class Automata {
         return line;
     }
 
-    private List<List<Coord>> getRegions(int tileType) {
-        List<List<Coord>> regions = new ArrayList<>();
+    private List<List<Coordinate>> getRegions(int tileType) {
+        List<List<Coordinate>> regions = new ArrayList<>();
         int[][] mapFlags = new int[width][height];
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (mapFlags[x][y] == 0 && map[x][y] == tileType) {
-                    List<Coord> newRegion = getRegionTiles(x, y);
+                    List<Coordinate> newRegion = getRegionTiles(x, y);
                     regions.add(newRegion);
 
-                    for (Coord tile : newRegion) {
+                    for (Coordinate tile : newRegion) {
                         mapFlags[tile.tileX][tile.tileY] = 1;
                     }
                 }
@@ -241,17 +241,17 @@ class Automata {
         return regions;
     }
 
-    private List<Coord> getRegionTiles(int startX, int startY) {
-        List<Coord> tiles = new ArrayList<>();
+    private List<Coordinate> getRegionTiles(int startX, int startY) {
+        List<Coordinate> tiles = new ArrayList<>();
         int[][] mapFlags = new int[width][height];
         int tileType = map[startX][startY];
 
-        Queue<Coord> queue = new LinkedList<>();
-        queue.add(new Coord(startX, startY));
+        Queue<Coordinate> queue = new LinkedList<>();
+        queue.add(new Coordinate(startX, startY));
         mapFlags[startX][startY] = 1;
 
         while (queue.size() > 0) {
-            Coord tile = queue.remove();
+            Coordinate tile = queue.remove();
             tiles.add(tile);
 
             for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++) {
@@ -259,7 +259,7 @@ class Automata {
                     if (isInMapRange(x, y) && (y == tile.tileY || x == tile.tileX)) {
                         if (mapFlags[x][y] == 0 && map[x][y] == tileType) {
                             mapFlags[x][y] = 1;
-                            queue.add(new Coord(x, y));
+                            queue.add(new Coordinate(x, y));
                         }
                     }
                 }
@@ -294,7 +294,6 @@ class Automata {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int neighbourWallTiles = getSurroundingWallCount(x, y);
-
                 if (neighbourWallTiles > 4) {
                     map[x][y] = 1;
                 } else if (neighbourWallTiles < 4) {
@@ -321,21 +320,10 @@ class Automata {
         return wallCount;
     }
 
-    private class Coord {
-
-        public int tileX;
-        public int tileY;
-
-        public Coord(int x, int y) {
-            tileX = x;
-            tileY = y;
-        }
-    }
-
     private static class Room implements Comparable<Room> {
 
-        public List<Coord> tiles;
-        public List<Coord> edgeTiles;
+        public List<Coordinate> tiles;
+        public List<Coordinate> edgeTiles;
         public List<Room> connectedRooms;
         public int roomSize;
         public boolean isAccessibleFromMainRoom;
@@ -344,13 +332,13 @@ class Automata {
         public Room() {
         }
 
-        public Room(List<Coord> roomTiles, int[][] map) {
+        public Room(List<Coordinate> roomTiles, int[][] map) {
             tiles = roomTiles;
             roomSize = tiles.size();
             connectedRooms = new ArrayList<>();
 
             edgeTiles = new ArrayList<>();
-            for (Coord tile : tiles) {
+            for (Coordinate tile : tiles) {
                 for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++) {
                     for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++) {
                         if (x == tile.tileX || y == tile.tileY) {
@@ -360,13 +348,6 @@ class Automata {
                         }
                     }
                 }
-            }
-        }
-
-        public void SetAccessibleFromMainRoom() {
-            if (!isAccessibleFromMainRoom) {
-                isAccessibleFromMainRoom = true;
-                connectedRooms.forEach(Room::SetAccessibleFromMainRoom);
             }
         }
 
@@ -380,6 +361,13 @@ class Automata {
             roomB.connectedRooms.add(roomA);
         }
 
+        public void SetAccessibleFromMainRoom() {
+            if (!isAccessibleFromMainRoom) {
+                isAccessibleFromMainRoom = true;
+                connectedRooms.forEach(Room::SetAccessibleFromMainRoom);
+            }
+        }
+
         public boolean IsConnected(Room otherRoom) {
             return connectedRooms.contains(otherRoom);
         }
@@ -387,6 +375,17 @@ class Automata {
         @Override
         public int compareTo(Room otherRoom) {
             return Integer.compare(otherRoom.roomSize, roomSize);
+        }
+    }
+
+    private static class Coordinate {
+
+        public final int tileX;
+        public final int tileY;
+
+        public Coordinate(int x, int y) {
+            tileX = x;
+            tileY = y;
         }
     }
 }

@@ -3,6 +3,7 @@ package com.zynaps.demo.worms;
 import com.zynaps.bioforge.Builder;
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.Island;
+import com.zynaps.bioforge.schemes.RouletteSelection;
 
 class Controller {
 
@@ -14,24 +15,24 @@ class Controller {
     private final Island population;
     private final GridView view;
     private final Worm worm;
+    public boolean replayChampion;
     private boolean active;
     private boolean interactive;
-    public boolean replayChampion;
 
     public Controller(GridView view) {
         this.view = view;
-        this.grid = new Grid();
-        this.worm = new Worm();
-        this.replayChampion = true;
-        this.processor = new Processor();
-        this.assembly = new int[Processor.PROGRAM_SIZE];
-        this.population = new Builder().tribes(1)
-                                       .populationSize(100)
-                                       .genomeSize(Processor.PROGRAM_SIZE * Processor.INSTRUCTION_SIZE)
-                                       .crossoverRate(0.5)
-                                       .mutationRate(0.0025)
-                                       .nuke(true)
-                                       .build();
+        grid = new Grid();
+        worm = new Worm();
+        replayChampion = true;
+        processor = new Processor();
+        assembly = new int[Processor.PROGRAM_SIZE];
+        population = new Builder().tribes(1)
+                .populationSize(100)
+                .genomeSize(Processor.PROGRAM_SIZE * Processor.INSTRUCTION_SIZE)
+                .crossoverRate(0.5)
+                .mutationRate(0.0025)
+                .nuke(true)
+                .build();
     }
 
     public void stop() {
@@ -68,7 +69,7 @@ class Controller {
 
     private double evaluate(Creature creature) {
         for (int i = 0; i < assembly.length; ++i) {
-            assembly[i] = (int)creature.extract(i * Processor.INSTRUCTION_SIZE, Processor.INSTRUCTION_SIZE);
+            assembly[i] = (int) creature.extract(i * Processor.INSTRUCTION_SIZE, Processor.INSTRUCTION_SIZE);
         }
         processor.load(assembly);
 
@@ -108,7 +109,7 @@ class Controller {
             processor.poke(17, worm.getFoodAntennae().getE());
             processor.poke(18, worm.getFoodAntennae().getSe());
 
-            int cycles = processor.run(262144);
+            processor.run(262144);
             double turnPeek = processor.peek(30);
             double movePeek = processor.peek(31);
 

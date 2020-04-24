@@ -2,6 +2,7 @@ package com.zynaps.demo.worms;
 
 class Antennae {
 
+    private final Sensor op;
     private int sw;
     private int w;
     private int nw;
@@ -9,8 +10,6 @@ class Antennae {
     private int ne;
     private int e;
     private int se;
-
-    private final Sensor op;
 
     public Antennae(Sensor op) {
         this.op = op;
@@ -101,40 +100,40 @@ class Antennae {
 
         switch (orientation) {
             case EAST:
-                this.sw = nwdist;
-                this.w = ndist;
-                this.nw = nedist;
-                this.n = edist;
-                this.ne = sedist;
-                this.e = sdist;
-                this.se = swdist;
+                sw = nwdist;
+                w = ndist;
+                nw = nedist;
+                n = edist;
+                ne = sedist;
+                e = sdist;
+                se = swdist;
                 break;
             case SOUTH:
-                this.sw = nedist;
-                this.w = edist;
-                this.nw = sedist;
-                this.n = sdist;
-                this.ne = swdist;
-                this.e = wdist;
-                this.se = swdist;
+                sw = nedist;
+                w = edist;
+                nw = sedist;
+                n = sdist;
+                ne = swdist;
+                e = wdist;
+                se = swdist;
                 break;
             case WEST:
-                this.sw = sedist;
-                this.w = sdist;
-                this.nw = swdist;
-                this.n = wdist;
-                this.ne = nwdist;
-                this.e = ndist;
-                this.se = nedist;
+                sw = sedist;
+                w = sdist;
+                nw = swdist;
+                n = wdist;
+                ne = nwdist;
+                e = ndist;
+                se = nedist;
                 break;
             case NORTH:
-                this.sw = swdist;
-                this.w = wdist;
-                this.nw = nwdist;
-                this.n = ndist;
-                this.ne = nedist;
-                this.e = edist;
-                this.se = sedist;
+                sw = swdist;
+                w = wdist;
+                nw = nwdist;
+                n = ndist;
+                ne = nedist;
+                e = edist;
+                se = sedist;
                 break;
         }
     }

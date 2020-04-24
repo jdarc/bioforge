@@ -3,6 +3,7 @@ package com.zynaps.demo.rostering;
 import org.joda.time.Hours;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,9 @@ class Rules {
     private final int restTime;
 
     public Rules(Schedule schedule) {
-        this.shifts = schedule.shifts.values();
-        this.employees = schedule.employees.values();
-        this.restTime = schedule.restTime;
+        shifts = schedule.shifts.values();
+        employees = schedule.employees.values();
+        restTime = schedule.restTime;
     }
 
     public double evaluate(List<Assignment> assignments) {
@@ -52,11 +53,10 @@ class Rules {
     private double processEmployeeRules(List<Assignment> assignments) {
         double fitness = 0.0;
         for (Employee employee : employees) {
-            List<Shift> shifts = assignments.stream()
-                                            .filter(a -> a.employee.id == employee.id)
+            List<Shift> shifts = assignments.stream().filter(a -> a.employee.id == employee.id)
                                             .map(assignment -> assignment.shift)
+                                            .sorted(Comparator.comparing(a -> a.start))
                                             .collect(Collectors.toList());
-            shifts.sort((a, b) -> a.start.compareTo(b.start));
             for (int i = 1; i < shifts.size(); ++i) {
                 int timeBetween = Hours.hoursBetween(shifts.get(i - 1).end, shifts.get(i).start).getHours();
                 if (timeBetween < restTime) {

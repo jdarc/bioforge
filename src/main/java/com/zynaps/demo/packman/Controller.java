@@ -11,57 +11,18 @@ class Controller {
 
     private static final int NUMBER_OF_CIRCLES = 10;
 
-    private Island population;
+    private final Island population;
     private Shape shape;
 
     public Controller() {
-        population = new Builder().tribes(3)
-                                  .populationSize(50)
-                                  .genomeSize(NUMBER_OF_CIRCLES * 63)
-                                  .crossoverRate(0.4)
-                                  .mutationRate(0.001)
-                                  .build();
+        population = new Builder()
+                .tribes(3)
+                .populationSize(150)
+                .genomeSize(NUMBER_OF_CIRCLES * 63)
+                .crossoverRate(0.3)
+                .mutationRate(0.002)
+                .build();
         reset();
-    }
-
-    public Shape getShape() {
-        return shape;
-    }
-
-    public List<Circle> getChampion() {
-        return decode(population.getChampion());
-    }
-
-    public int getGeneration() {
-        return population.getGeneration();
-    }
-
-    public double getFitness() {
-        return population.getChampion().getFitness();
-    }
-
-    public void reset() {
-        shape = generateShape(16);
-        population.zero();
-    }
-
-    public void evolve() {
-        population.evolve(creature -> {
-            List<Circle> circles = decode(creature);
-            double fitness = 0.0;
-            for (int i = 0; i < circles.size(); ++i) {
-                Circle circle = circles.get(i);
-                if (shape.contains(circle)) {
-                    fitness += circle.radius;
-                }
-                for (Circle other : circles) {
-                    if (other != circle) {
-                        fitness -= other.overlap(circle);
-                    }
-                }
-            }
-            return fitness;
-        });
     }
 
     private static List<Circle> decode(Creature creature) {
@@ -122,5 +83,46 @@ class Controller {
         }
 
         return new Shape(result);
+    }
+
+    public Shape getShape() {
+        return shape;
+    }
+
+    public List<Circle> getChampion() {
+        return decode(population.getChampion());
+    }
+
+    public int getGeneration() {
+        return population.getGeneration();
+    }
+
+    public double getFitness() {
+        return population.getChampion().getFitness();
+    }
+
+    public void reset() {
+        shape = generateShape(16);
+        population.zero();
+    }
+
+    public void evolve() {
+        population.evolve(creature -> {
+            List<Circle> circles = decode(creature);
+            double fitness = 0.0;
+            for (Circle circle : circles) {
+                if (shape.contains(circle)) {
+                    fitness += circle.radius;
+                    for (Circle other : circles) {
+                        if (other != circle) {
+                            fitness -= other.overlap(circle);
+                        }
+                    }
+                } else {
+                    fitness -= circle.radius;
+                }
+            }
+            return Math.max(0, fitness);
+        });
     }
 }

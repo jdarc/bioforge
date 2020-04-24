@@ -1,48 +1,64 @@
 package com.zynaps.demo.circles;
 
 import com.zynaps.bioforge.Builder;
-import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.Island;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 class Controller {
 
     private static final int MINIMUM_RADIUS = 5;
     private static final int MAXIMUM_RADIUS = 13;
-    private static final int NUMBER_STATIC_CIRCLES = 100;
+    private static final int NUMBER_STATIC_CIRCLES = 50;
     private static final double SCALER = 1.0 / 2097152.0;
 
-    private List<Circle> circles;
+    private final List<Circle> staticCircles;
     private Island island;
     private int width;
     private int height;
 
     public Controller() {
-        circles = new ArrayList<>();
-        island = new Builder().populationSize(100).genomeSize(63).build();
+        staticCircles = new ArrayList<>(NUMBER_STATIC_CIRCLES);
     }
 
     public Circle getChampionCircle() {
-        return decodeToCircle(island.getChampion(), width * SCALER);
+        return new Circle(getIsland().getChampion(), width * SCALER);
     }
 
     public Collection<Circle> getStaticCircles() {
-        return Collections.unmodifiableCollection(circles);
+        return staticCircles;
     }
 
     public int getGeneration() {
-        return island.getGeneration();
+        return getIsland().getGeneration();
     }
 
     public double getFitness() {
-        return island.getChampion().getFitness();
+        return getIsland().getChampion().getFitness();
     }
 
     public void reset(int width, int height) {
         this.width = width;
         this.height = height;
-        circles.clear();
+        island = null;
+        generateStaticCircles(width, height);
+    }
+
+    public void evolve() {
+        getIsland().evolve(creature -> {
+            Circle circle = new Circle(creature, width * SCALER);
+            if (isOutsideViewport(circle) || getStaticCircles().stream().anyMatch(circle::overlaps)) {
+                return 0.0;
+            }
+            return circle.radius;
+        });
+    }
+
+    private void generateStaticCircles(int width, int height) {
+        staticCircles.clear();
         Random random = new Random();
         for (int i = 0; i < NUMBER_STATIC_CIRCLES; ++i) {
             int iterations = 10;
@@ -51,37 +67,25 @@ class Controller {
                 double x = radius + random.nextDouble() * (width - 2.0 * radius);
                 double y = radius + random.nextDouble() * (height - 2.0 * radius);
                 Circle circle = new Circle(x, y, radius);
-                if (!circles.stream().anyMatch(circle::overlaps)) {
-                    circles.add(circle);
+                if (staticCircles.stream().noneMatch(circle::overlaps)) {
+                    staticCircles.add(circle);
                     iterations = 0;
                 }
             }
         }
     }
 
-    public void evolve() {
-        island.evolve(creature -> {
-            Circle circle = decodeToCircle(creature, width * SCALER);
-            double fitness = circle.radius;
-            for (Circle other : circles) {
-                if (circle.overlaps(other) ||
-                    (circle.x + circle.radius > width) ||
-                    (circle.x - circle.radius < 0.0) ||
-                    (circle.y + circle.radius > height) ||
-                    (circle.y - circle.radius < 0.0)) {
-                    fitness = 0.0;
-                    break;
-                }
-            }
-            return fitness;
-        });
+    private boolean isOutsideViewport(Circle circle) {
+        return (circle.x + circle.radius > width) ||
+                (circle.x - circle.radius < 0.0) ||
+                (circle.y + circle.radius > height) ||
+                (circle.y - circle.radius < 0.0);
     }
 
-    private static Circle decodeToCircle(Creature creature, double multiplier) {
-        long dna = creature.extract(0, 63);
-        double x = multiplier * (0x1FFFFF & dna);
-        double y = multiplier * (0x1FFFFF & dna >> 21);
-        double r = multiplier * (0x1FFFFF & dna >> 42);
-        return new Circle(x, y, r);
+    private Island getIsland() {
+        if (island == null) {
+            island = new Builder().populationSize(100).genomeSize(63).build();
+        }
+        return island;
     }
 }

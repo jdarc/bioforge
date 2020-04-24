@@ -1,6 +1,7 @@
 package com.zynaps.demo.worms;
 
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 class Grid {
 
@@ -51,10 +52,7 @@ class Grid {
 
     public void reset() {
         trailIndex = 0;
-        int origin = (GRID_SIZE >> 1) * GRID_SIZE + (GRID_SIZE >> 1);
-        for (int i = 0; i < trail.length; ++i) {
-            trail[i] = origin;
-        }
+        Arrays.fill(trail, (GRID_SIZE >> 1) * GRID_SIZE + (GRID_SIZE >> 1));
         System.arraycopy(terrain, 0, pixels, 0, terrain.length);
     }
 

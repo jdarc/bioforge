@@ -2,10 +2,7 @@ package com.zynaps.demo.packman;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.List;
 
 class MainFrame extends JFrame {
@@ -17,41 +14,21 @@ class MainFrame extends JFrame {
         setTitle("Genetic Algorithm - Packman");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_R:
-                        controller.reset();
-                        break;
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_R) {
+                    controller.reset();
                 }
             }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
         });
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-            }
-
+        addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
+                super.componentShown(e);
                 new Timer(0, ignore -> controller.evolve()).start();
-                new Timer(30, ignore -> render()).start();
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
+                new Timer(33, ignore -> render()).start();
             }
         });
         surface = new Visualizer();
@@ -63,7 +40,6 @@ class MainFrame extends JFrame {
 
     private void render() {
         surface.clear();
-
         Shape shape = controller.getShape();
         if (shape != null) {
             for (Edge edge : shape.edges) {
@@ -78,7 +54,7 @@ class MainFrame extends JFrame {
                 surface.drawCircle(circle.x, circle.y, circle.radius);
             }
         }
-
+        surface.setFont(this.getFont());
         surface.setColor(Color.BLACK);
         surface.drawString("Generation: " + controller.getGeneration() + ", Fitness: " + controller.getFitness(), 10, 20);
         surface.repaint();

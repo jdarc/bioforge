@@ -119,9 +119,7 @@ public class Island {
     private void evolveTribes(ToDoubleFunction<Creature> callback) throws InterruptedException {
         List<Callable<Object>> todo = new ArrayList<>(tribes.length);
         for (Tribe tribe : tribes) {
-            todo.add(Executors.callable(() -> {
-                evolve(tribe, callback);
-            }));
+            todo.add(Executors.callable(() -> evolve(tribe, callback)));
         }
         (service = service == null ? new ForkJoinPool() : service).invokeAll(todo);
 

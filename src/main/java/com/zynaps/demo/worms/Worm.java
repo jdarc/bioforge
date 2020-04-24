@@ -6,8 +6,8 @@ class Worm {
     private int y;
     private int energy;
     private Orientation orientation;
-    private Antennae wallAntennae;
-    private Antennae foodAntennae;
+    private final Antennae wallAntennae;
+    private final Antennae foodAntennae;
 
     public Worm() {
         wallAntennae = new Antennae((grid, x, y) -> !grid.isObstacle(x, y));
@@ -47,7 +47,7 @@ class Worm {
     }
 
     public void addEnergy(int amount) {
-        energy = Math.min(100, energy + amount);
+        energy = Math.min(300, energy + amount);
     }
 
     public void moveTo(int x, int y) {

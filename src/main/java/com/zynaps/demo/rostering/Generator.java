@@ -22,17 +22,17 @@ class Generator {
 
         DateTime startOfWeek = new LocalDate().withDayOfWeek(DateTimeConstants.MONDAY).toDateTimeAtStartOfDay();
         for (int i = 0; i < totalShifts; ++i) {
-            DateTime start = startOfWeek.plusDays((int)(Math.random() * 7)).plusHours((int)(Math.random() * 8));
-            shifts.add(new Shift(i + 1, start, start.plusHours(8), (int)(1 + Math.random() * 3)));
+            DateTime start = startOfWeek.plusDays((int) (Math.random() * 7)).plusHours((int) (Math.random() * 8));
+            shifts.add(new Shift(i + 1, start, start.plusHours(8), (int) (1 + Math.random() * 3)));
         }
 
         for (int i = 0; i < totalEmployees; ++i) {
-            int total = (int)(0 + Math.random() * 3);
+            int total = (int) (0 + Math.random() * 3);
             List<Absence> absences = new ArrayList<>(total);
             while (total-- > 0) {
-                int hours = (int)(Math.random() * 8);
-                DateTime start = startOfWeek.plusDays((int)(Math.random() * 7)).plusHours(hours);
-                absences.add(new Absence(start, start.plusHours(1 + (int)(Math.random() * (23 - hours)))));
+                int hours = (int) (Math.random() * 8);
+                DateTime start = startOfWeek.plusDays((int) (Math.random() * 7)).plusHours(hours);
+                absences.add(new Absence(start, start.plusHours(1 + (int) (Math.random() * (23 - hours)))));
             }
             employees.add(new Employee(i + 1, absences));
         }
@@ -156,29 +156,29 @@ class Generator {
 
         List<Employee> employees = new ArrayList<>();
         employees.add(new Employee(1, absence("2015-07-16 00:00:00", "2015-07-26 23:59:00"),
-                                   absence("2015-07-16 06:00:00", "2015-07-24 23:00:00")));
+                absence("2015-07-16 06:00:00", "2015-07-24 23:00:00")));
         employees.add(new Employee(2, absence("2015-07-14 00:00:00", "2015-07-28 23:00:00")));
         employees.add(new Employee(3, absence("2015-07-16 01:45:00", "2015-07-16 18:45:00"),
-                                   absence("2015-07-18 00:00:00", "2015-07-18 20:00:00")));
+                absence("2015-07-18 00:00:00", "2015-07-18 20:00:00")));
         employees.add(new Employee(4, absence("2015-07-13 06:15:00", "2015-07-13 10:15:00"),
-                                   absence("2015-07-14 06:15:00", "2015-07-14 10:15:00"),
-                                   absence("2015-07-16 06:15:00", "2015-07-16 10:15:00"),
-                                   absence("2015-07-15 06:15:00", "2015-07-15 10:15:00"),
-                                   absence("2015-07-17 06:15:00", "2015-07-17 10:15:00"),
-                                   absence("2015-07-18 06:15:00", "2015-07-18 10:15:00"),
-                                   absence("2015-07-19 06:15:00", "2015-07-19 10:15:00")));
+                absence("2015-07-14 06:15:00", "2015-07-14 10:15:00"),
+                absence("2015-07-16 06:15:00", "2015-07-16 10:15:00"),
+                absence("2015-07-15 06:15:00", "2015-07-15 10:15:00"),
+                absence("2015-07-17 06:15:00", "2015-07-17 10:15:00"),
+                absence("2015-07-18 06:15:00", "2015-07-18 10:15:00"),
+                absence("2015-07-19 06:15:00", "2015-07-19 10:15:00")));
         employees.add(new Employee(5));
         employees.add(new Employee(6, absence("2015-07-16 00:00:00", "2015-07-16 23:59:00")));
         employees.add(new Employee(7));
         employees.add(new Employee(8, absence("2015-07-18 00:00:00", "2015-07-26 23:59:00")));
         employees.add(new Employee(9));
         employees.add(new Employee(10, absence("2015-07-17 15:00:00", "2015-07-17 23:00:00"),
-                                   absence("2015-07-18 15:00:00", "2015-07-18 23:00:00"),
-                                   absence("2015-07-13 06:00:00", "2015-07-13 23:00:00"),
-                                   absence("2015-07-19 13:00:00", "2015-07-19 23:00:00"),
-                                   absence("2015-07-14 06:00:00", "2015-07-14 17:00:00"),
-                                   absence("2015-07-15 06:00:00", "2015-07-15 17:00:00"),
-                                   absence("2015-07-16 06:00:00", "2015-07-16 17:00:00")));
+                absence("2015-07-18 15:00:00", "2015-07-18 23:00:00"),
+                absence("2015-07-13 06:00:00", "2015-07-13 23:00:00"),
+                absence("2015-07-19 13:00:00", "2015-07-19 23:00:00"),
+                absence("2015-07-14 06:00:00", "2015-07-14 17:00:00"),
+                absence("2015-07-15 06:00:00", "2015-07-15 17:00:00"),
+                absence("2015-07-16 06:00:00", "2015-07-16 17:00:00")));
         employees.add(new Employee(11, absence("2015-07-11 00:00:00", "2015-07-13 23:59:00")));
         employees.add(new Employee(12));
         employees.add(new Employee(13, absence("2015-07-17 00:00:00", "2015-07-27 23:59:00")));
@@ -188,28 +188,28 @@ class Generator {
         employees.add(new Employee(17));
         employees.add(new Employee(18));
         employees.add(new Employee(19, absence("2015-07-14 18:00:00", "2015-07-14 22:00:00"),
-                                   absence("2015-07-16 18:00:00", "2015-07-16 22:00:00"),
-                                   absence("2015-07-15 00:00:00", "2015-07-15 23:59:00"),
-                                   absence("2015-07-17 00:00:00", "2015-07-17 23:59:00")));
+                absence("2015-07-16 18:00:00", "2015-07-16 22:00:00"),
+                absence("2015-07-15 00:00:00", "2015-07-15 23:59:00"),
+                absence("2015-07-17 00:00:00", "2015-07-17 23:59:00")));
         employees.add(new Employee(20));
         employees.add(new Employee(21));
         employees.add(new Employee(22, absence("2015-07-13 06:45:00", "2015-07-13 14:00:00"),
-                                   absence("2015-07-15 06:45:00", "2015-07-15 14:00:00"),
-                                   absence("2015-07-16 16:00:00", "2015-07-16 23:00:00"),
-                                   absence("2015-07-17 00:00:00", "2015-07-17 23:59:00"),
-                                   absence("2015-07-18 00:00:00", "2015-07-18 23:59:00"),
-                                   absence("2015-07-19 00:00:00", "2015-07-19 23:59:00")));
+                absence("2015-07-15 06:45:00", "2015-07-15 14:00:00"),
+                absence("2015-07-16 16:00:00", "2015-07-16 23:00:00"),
+                absence("2015-07-17 00:00:00", "2015-07-17 23:59:00"),
+                absence("2015-07-18 00:00:00", "2015-07-18 23:59:00"),
+                absence("2015-07-19 00:00:00", "2015-07-19 23:59:00")));
         employees.add(new Employee(23, absence("2015-07-13 22:00:00", "2015-07-14 02:00:00")));
         employees.add(new Employee(24));
         employees.add(new Employee(25, absence("2015-07-17 15:00:00", "2015-07-19 23:00:00")));
         employees.add(new Employee(26));
         employees.add(new Employee(27, absence("2015-06-23 07:00:00", "2015-09-06 23:00:00"),
-                                   absence("2015-07-06 07:00:00", "2015-07-31 23:00:00"),
-                                   absence("2015-07-13 07:00:00", "2015-07-19 23:00:00")));
+                absence("2015-07-06 07:00:00", "2015-07-31 23:00:00"),
+                absence("2015-07-13 07:00:00", "2015-07-19 23:00:00")));
         employees.add(new Employee(28));
         employees.add(new Employee(29));
         employees.add(new Employee(30, absence("2015-07-14 10:00:00", "2015-07-14 22:15:00"),
-                                   absence("2015-07-17 10:00:00", "2015-07-17 14:00:00")));
+                absence("2015-07-17 10:00:00", "2015-07-17 14:00:00")));
         employees.add(new Employee(31));
         employees.add(new Employee(32));
         employees.add(new Employee(33, absence("2015-07-13 00:00:00", "2015-07-13 23:59:00")));

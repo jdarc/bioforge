@@ -1,8 +1,10 @@
 package com.zynaps.demo.packman;
 
+import javax.swing.*;
+
 class Program {
 
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
+        SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
     }
 }

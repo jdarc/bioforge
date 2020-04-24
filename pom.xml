@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>BioForge</name>
-    <url>http://www.zynaps.com</url>
+    <url>https://github.com/jdarc/bioforge</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

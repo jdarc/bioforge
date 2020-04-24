@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 class Tribe {
 
-    Creature champion;
+    final Creature champion;
     List<Creature> parents;
     List<Creature> children;
 
@@ -24,19 +24,19 @@ class Tribe {
     }
 
     void compete(ToDoubleFunction<Creature> callback) {
-        parents.stream().forEach(creature -> creature.fitness = callback.applyAsDouble(creature));
-        champion.mimic(parents.stream().sorted().findFirst().get());
+        parents.forEach(creature -> creature.fitness = callback.applyAsDouble(creature));
+        champion.mimic(parents.stream().sorted().findFirst().orElse(champion));
     }
 
     void breed(SelectionScheme scheme, CrossoverOperator crossoverOperator, RandomGenerator random, double rate) {
         List<Creature> breeders = scheme.apply(new ArrayList<>(parents), random);
-        children.stream().forEach(child -> crossoverOperator.accept(breeders.get(random.nextInt(breeders.size())),
-                                                                    breeders.get(random.nextInt(breeders.size())),
-                                                                    child, random, rate));
+        children.forEach(child -> crossoverOperator.accept(breeders.get(random.nextInt(breeders.size())),
+                breeders.get(random.nextInt(breeders.size())),
+                child, random, rate));
     }
 
     void mutate(MutationOperator mutationOperator, RandomGenerator random, double rate) {
-        children.stream().forEach(child -> mutationOperator.accept(child, random, rate));
+        children.forEach(child -> mutationOperator.accept(child, random, rate));
     }
 
     void swap() {

@@ -13,8 +13,9 @@ class Shape {
 
     public boolean contains(Circle circle) {
         for (Edge edge : edges) {
-            if ((circle.x - edge.normal.x * circle.radius - edge.center.x) * edge.normal.x +
-                (circle.y - edge.normal.y * circle.radius - edge.center.y) * edge.normal.y < 0.0) {
+            double dpx = (circle.x - edge.normal.x * circle.radius - edge.center.x) * edge.normal.x;
+            double dpy = (circle.y - edge.normal.y * circle.radius - edge.center.y) * edge.normal.y;
+            if (dpx + dpy < 0.0) {
                 return false;
             }
         }
