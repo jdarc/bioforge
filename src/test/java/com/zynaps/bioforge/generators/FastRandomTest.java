@@ -1,17 +1,18 @@
 package com.zynaps.bioforge.generators;
 
+import java.util.concurrent.ThreadLocalRandom;
 import org.junit.Test;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThan;
 
 public class FastRandomTest {
 
     @Test
-    public void testNextIntWithPositiveNonZeroBoundary() throws Exception {
-        RandomGenerator random = new FastRandom();
+    public void testNextIntWithPositiveNonZeroBoundary() {
+        RandomNumberGenerator random = new FastRandomNumbers();
         for (int t = 0; t < 1000; t++) {
             int bound = ThreadLocalRandom.current().nextInt(100) + 1;
             int actual = random.nextInt(bound);
@@ -21,8 +22,8 @@ public class FastRandomTest {
     }
 
     @Test
-    public void testNextIntWithZeroAndNegativeBoundary() throws Exception {
-        RandomGenerator random = new FastRandom();
+    public void testNextIntWithZeroAndNegativeBoundary() {
+        RandomNumberGenerator random = new FastRandomNumbers();
         assertThat(random.nextInt(0), equalTo(0));
         for (int t = 0; t < 1000; t++) {
             assertThat(random.nextInt(0 - ThreadLocalRandom.current().nextInt(100)), equalTo(0));
@@ -30,8 +31,8 @@ public class FastRandomTest {
     }
 
     @Test
-    public void testNextDouble() throws Exception {
-        RandomGenerator random = new FastRandom();
+    public void testNextDouble() {
+        RandomNumberGenerator random = new FastRandomNumbers();
         for (int t = 0; t < 1000; t++) {
             assertThat(random.nextDouble(), lessThan(1.0));
             assertThat(random.nextDouble(), greaterThanOrEqualTo(0.0));

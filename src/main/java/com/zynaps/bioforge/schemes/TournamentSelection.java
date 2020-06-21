@@ -1,8 +1,7 @@
 package com.zynaps.bioforge.schemes;
 
 import com.zynaps.bioforge.Creature;
-import com.zynaps.bioforge.generators.RandomGenerator;
-
+import com.zynaps.bioforge.generators.RandomNumberGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +14,13 @@ public class TournamentSelection implements SelectionScheme {
     }
 
     @Override
-    public List<Creature> apply(List<Creature> creatures, RandomGenerator random) {
-        int total = 2 * creatures.size();
+    public List<Creature> apply(List<Creature> creatures, RandomNumberGenerator random) {
+        var total = 2 * creatures.size();
         List<Creature> breeders = new ArrayList<>(total);
-        for (int i = 0; i < total; ++i) {
-            Creature selected = creatures.get(random.nextInt(creatures.size()));
-            for (int j = 1; j < arity; ++j) {
-                Creature candidate = creatures.get(random.nextInt(creatures.size()));
+        for (var i = 0; i < total; ++i) {
+            var selected = creatures.get(random.nextInt(creatures.size()));
+            for (var j = 1; j < arity; ++j) {
+                var candidate = creatures.get(random.nextInt(creatures.size()));
                 if (candidate.getFitness() > selected.getFitness()) {
                     selected = candidate;
                 }

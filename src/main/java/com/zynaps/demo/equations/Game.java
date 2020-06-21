@@ -1,13 +1,11 @@
 package com.zynaps.demo.equations;
 
 import com.zynaps.bioforge.Builder;
-import com.zynaps.bioforge.Island;
-
+import java.util.Arrays;
+import java.util.Random;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.Arrays;
-import java.util.Random;
 
 import static java.lang.Double.parseDouble;
 
@@ -28,60 +26,64 @@ class Game {
     }
 
     private static int[] shuffle(int... numbers) {
-        for (int times = 0; times < SHUFFLE_COUNT; ++times) {
+        for (var times = 0; times < SHUFFLE_COUNT; ++times) {
             swap(numbers, RANDOM.nextInt(numbers.length), RANDOM.nextInt(numbers.length));
         }
         return numbers;
     }
 
     private static void swap(int[] numbers, int i, int j) {
-        int temp = numbers[i];
+        var temp = numbers[i];
         numbers[i] = numbers[j];
         numbers[j] = temp;
     }
 
     public static <T extends Comparable<T>> T clamp(T val, T min, T max) {
-        if (val.compareTo(min) < 0) return min;
-        if (val.compareTo(max) > 0) return max;
+        if (val.compareTo(min) < 0) {
+            return min;
+        }
+        if (val.compareTo(max) > 0) {
+            return max;
+        }
         return val;
     }
 
     public String describe() {
         return "Numbers: " + Arrays.toString(numbers) +
-                System.lineSeparator() +
-                "Target: " + target +
-                System.lineSeparator();
+               System.lineSeparator() +
+               "Target: " + target +
+               System.lineSeparator();
     }
 
     public void run() {
         engine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-        Island population = new Builder().tribes(4)
-                .populationSize(50)
-                .genomeSize(32)
-                .crossoverRate(0.5)
-                .mutationRate(0.005)
-                .build();
+        var population = new Builder().tribes(4)
+                                      .populationSize(50)
+                                      .genomeSize(32)
+                                      .crossoverRate(0.5)
+                                      .mutationRate(0.005)
+                                      .build();
 
-        double lastResult = 0.0;
+        var lastResult = 0.0;
         do {
             population.evolve(creature -> {
-                Formula formula = new Formula(creature);
+                var formula = new Formula(creature);
                 if (formula.isValid()) {
                     return target - Math.abs(target - evaluate(formula.toEquation(numbers)));
                 }
                 return 0.0;
             });
 
-            String formula = new Formula(population.getChampion()).toEquation(numbers);
-            double result = evaluate(formula);
+            var formula = new Formula(population.getChampion()).toEquation(numbers);
+            var result = evaluate(formula);
             if (lastResult != result) {
                 lastResult = result;
                 System.out.println(String.format("Generation [%d]: %s = %s", population.getGeneration(), formula, result));
             }
         } while (evaluate(new Formula(population.getChampion()).toEquation(numbers)) != target);
 
-        String formula = new Formula(population.getChampion()).toEquation(numbers);
+        var formula = new Formula(population.getChampion()).toEquation(numbers);
         System.out.println(String.format("Solution: %s = %s", formula, evaluate(formula)));
     }
 

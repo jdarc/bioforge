@@ -2,7 +2,6 @@ package com.zynaps.demo.circles;
 
 import com.zynaps.bioforge.Builder;
 import com.zynaps.bioforge.Island;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -49,7 +48,7 @@ class Controller {
 
     public void evolve() {
         getIsland().evolve(creature -> {
-            Circle circle = new Circle(creature, width * SCALER);
+            var circle = new Circle(creature, width * SCALER);
             if (isOutsideViewport(circle) || getStaticCircles().stream().anyMatch(circle::overlaps)) {
                 return 0.0;
             }
@@ -59,14 +58,14 @@ class Controller {
 
     private void generateStaticCircles(int width, int height) {
         staticCircles.clear();
-        Random random = new Random();
-        for (int i = 0; i < NUMBER_STATIC_CIRCLES; ++i) {
-            int iterations = 10;
-            double radius = MINIMUM_RADIUS + random.nextDouble() * (MAXIMUM_RADIUS - MINIMUM_RADIUS);
+        var random = new Random();
+        for (var i = 0; i < NUMBER_STATIC_CIRCLES; ++i) {
+            var iterations = 10;
+            var radius = MINIMUM_RADIUS + random.nextDouble() * (MAXIMUM_RADIUS - MINIMUM_RADIUS);
             while (--iterations > 0) {
-                double x = radius + random.nextDouble() * (width - 2.0 * radius);
-                double y = radius + random.nextDouble() * (height - 2.0 * radius);
-                Circle circle = new Circle(x, y, radius);
+                var x = radius + random.nextDouble() * (width - 2.0 * radius);
+                var y = radius + random.nextDouble() * (height - 2.0 * radius);
+                var circle = new Circle(x, y, radius);
                 if (staticCircles.stream().noneMatch(circle::overlaps)) {
                     staticCircles.add(circle);
                     iterations = 0;
@@ -77,9 +76,9 @@ class Controller {
 
     private boolean isOutsideViewport(Circle circle) {
         return (circle.x + circle.radius > width) ||
-                (circle.x - circle.radius < 0.0) ||
-                (circle.y + circle.radius > height) ||
-                (circle.y - circle.radius < 0.0);
+               (circle.x - circle.radius < 0.0) ||
+               (circle.y + circle.radius > height) ||
+               (circle.y - circle.radius < 0.0);
     }
 
     private Island getIsland() {

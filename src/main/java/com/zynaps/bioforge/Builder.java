@@ -1,8 +1,7 @@
 package com.zynaps.bioforge;
 
-import com.zynaps.bioforge.generators.FastRandom;
-import com.zynaps.bioforge.generators.JavaRandom;
-import com.zynaps.bioforge.generators.RandomGenerator;
+import com.zynaps.bioforge.generators.JavaRandomNumbers;
+import com.zynaps.bioforge.generators.RandomNumberGenerator;
 import com.zynaps.bioforge.operators.BitFlipMutator;
 import com.zynaps.bioforge.operators.CrossoverOperator;
 import com.zynaps.bioforge.operators.MutationOperator;
@@ -15,7 +14,7 @@ public class Builder {
     private CrossoverOperator crossoverOperator = new SpliceCrossover();
     private MutationOperator mutationOperator = new BitFlipMutator();
     private SelectionScheme scheme = new TournamentSelection(3);
-    private RandomGenerator random = new JavaRandom();
+    private RandomNumberGenerator random = new JavaRandomNumbers();
     private int tribes = 1;
     private int populationSize = 50;
     private int genomeSize = 64;
@@ -38,7 +37,7 @@ public class Builder {
         return this;
     }
 
-    public Builder randomGenerator(RandomGenerator random) {
+    public Builder randomGenerator(RandomNumberGenerator random) {
         this.random = random;
         return this;
     }
@@ -74,7 +73,7 @@ public class Builder {
     }
 
     public Island build() {
-        Island island = new Island(tribes, populationSize, genomeSize);
+        var island = new Island(tribes, populationSize, genomeSize);
         island.useCrossoverOperator(crossoverOperator);
         island.useMutationOperator(mutationOperator);
         island.useSelectionScheme(scheme);

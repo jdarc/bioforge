@@ -45,14 +45,14 @@ class Antennae {
 
     public void sense(Grid grid, int x, int y, Orientation orientation) {
         int tx, ty;
-        int sdist = 0;
-        int swdist = 0;
-        int wdist = 0;
-        int nwdist = 0;
-        int ndist = 0;
-        int nedist = 0;
-        int edist = 0;
-        int sedist = 0;
+        var sdist = 0;
+        var swdist = 0;
+        var wdist = 0;
+        var nwdist = 0;
+        var ndist = 0;
+        var nedist = 0;
+        var edist = 0;
+        var sedist = 0;
 
         ty = y;
         while (op.accept(grid, x, --ty)) {
@@ -99,7 +99,7 @@ class Antennae {
         }
 
         switch (orientation) {
-            case EAST:
+            case EAST -> {
                 sw = nwdist;
                 w = ndist;
                 nw = nedist;
@@ -107,8 +107,8 @@ class Antennae {
                 ne = sedist;
                 e = sdist;
                 se = swdist;
-                break;
-            case SOUTH:
+            }
+            case SOUTH -> {
                 sw = nedist;
                 w = edist;
                 nw = sedist;
@@ -116,8 +116,8 @@ class Antennae {
                 ne = swdist;
                 e = wdist;
                 se = swdist;
-                break;
-            case WEST:
+            }
+            case WEST -> {
                 sw = sedist;
                 w = sdist;
                 nw = swdist;
@@ -125,8 +125,8 @@ class Antennae {
                 ne = nwdist;
                 e = ndist;
                 se = nedist;
-                break;
-            case NORTH:
+            }
+            case NORTH -> {
                 sw = swdist;
                 w = wdist;
                 nw = nwdist;
@@ -134,7 +134,7 @@ class Antennae {
                 ne = nedist;
                 e = edist;
                 se = sedist;
-                break;
+            }
         }
     }
 }

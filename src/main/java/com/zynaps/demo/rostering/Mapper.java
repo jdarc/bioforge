@@ -1,9 +1,10 @@
 package com.zynaps.demo.rostering;
 
 import com.zynaps.bioforge.Creature;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Comparator.comparingInt;
 
 class Mapper {
 
@@ -15,9 +16,11 @@ class Mapper {
 
     public Mapper(Schedule schedule) {
         this.schedule = schedule;
-        allocs = schedule.shifts.values().stream().mapToInt(shift -> shift.required).sum();
-        shiftBits = bitsNeeded(schedule.shifts.values().stream().max((a, b) -> Integer.compare(a.id, b.id)).get().id);
-        employeeBits = bitsNeeded(schedule.employees.values().stream().max((a, b) -> Integer.compare(a.id, b.id)).get().id);
+        var shiftStream = schedule.shifts.values().stream();
+        var employeeStream = schedule.employees.values().stream();
+        allocs = shiftStream.mapToInt(shift -> shift.required).sum();
+        shiftBits = bitsNeeded(shiftStream.max(comparingInt(a -> a.id)).orElseThrow().id);
+        employeeBits = bitsNeeded(employeeStream.max(comparingInt(a -> a.id)).orElseThrow().id);
         genomeLength = allocs * (shiftBits + employeeBits);
     }
 
@@ -26,14 +29,14 @@ class Mapper {
     }
 
     public List<Assignment> decode(Creature creature) {
-        final int step = shiftBits + employeeBits;
-        final int shiftMask = (1 << shiftBits) - 1;
-        final int employeeMask = (1 << employeeBits) - 1;
-        final ArrayList<Assignment> assignments = new ArrayList<>(allocs);
-        for (int i = 0; i < allocs; ++i) {
-            long strand = creature.extract(i * step, step);
-            Shift shift = schedule.getShiftById((int) (strand >>> employeeBits & shiftMask));
-            Employee employee = schedule.getEmployeeById((int) (strand & employeeMask));
+        final var step = shiftBits + employeeBits;
+        final var shiftMask = (1 << shiftBits) - 1;
+        final var employeeMask = (1 << employeeBits) - 1;
+        final var assignments = new ArrayList<Assignment>(allocs);
+        for (var i = 0; i < allocs; ++i) {
+            var strand = creature.extract(i * step, step);
+            var shift = schedule.getShiftById((int) (strand >>> employeeBits & shiftMask));
+            var employee = schedule.getEmployeeById((int) (strand & employeeMask));
             if (shift != Shift.NULL && employee != Employee.NULL) {
                 assignments.add(new Assignment(shift, employee));
             }

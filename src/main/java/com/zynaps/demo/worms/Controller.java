@@ -3,7 +3,6 @@ package com.zynaps.demo.worms;
 import com.zynaps.bioforge.Builder;
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.Island;
-import com.zynaps.bioforge.schemes.RouletteSelection;
 
 class Controller {
 
@@ -27,12 +26,12 @@ class Controller {
         processor = new Processor();
         assembly = new int[Processor.PROGRAM_SIZE];
         population = new Builder().tribes(1)
-                .populationSize(100)
-                .genomeSize(Processor.PROGRAM_SIZE * Processor.INSTRUCTION_SIZE)
-                .crossoverRate(0.5)
-                .mutationRate(0.0025)
-                .nuke(true)
-                .build();
+                                  .populationSize(100)
+                                  .genomeSize(Processor.PROGRAM_SIZE * Processor.INSTRUCTION_SIZE)
+                                  .crossoverRate(0.5)
+                                  .mutationRate(0.0025)
+                                  .nuke(true)
+                                  .build();
     }
 
     public void stop() {
@@ -42,7 +41,7 @@ class Controller {
     public void start() {
         active = true;
         new Thread(() -> {
-            long t = System.currentTimeMillis();
+            var t = System.currentTimeMillis();
             while (active) {
                 population.evolve(this::evaluate);
                 replayChampion();
@@ -68,7 +67,7 @@ class Controller {
     }
 
     private double evaluate(Creature creature) {
-        for (int i = 0; i < assembly.length; ++i) {
+        for (var i = 0; i < assembly.length; ++i) {
             assembly[i] = (int) creature.extract(i * Processor.INSTRUCTION_SIZE, Processor.INSTRUCTION_SIZE);
         }
         processor.load(assembly);
@@ -77,8 +76,8 @@ class Controller {
         worm.reset();
         worm.moveTo(128, 128);
 
-        int step = 0;
-        double fitness = 0.0;
+        var step = 0;
+        var fitness = 0.0;
         while (active && worm.isAlive()) {
             grid.set(worm.getX(), worm.getY());
 
@@ -110,8 +109,8 @@ class Controller {
             processor.poke(18, worm.getFoodAntennae().getSe());
 
             processor.run(262144);
-            double turnPeek = processor.peek(30);
-            double movePeek = processor.peek(31);
+            var turnPeek = processor.peek(30);
+            var movePeek = processor.peek(31);
 
             if (turnPeek < -1.0) {
                 worm.turnRight();

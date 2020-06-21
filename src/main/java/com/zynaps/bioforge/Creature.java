@@ -1,6 +1,7 @@
 package com.zynaps.bioforge;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Creature implements Comparable<Creature> {
 
@@ -42,17 +43,15 @@ public class Creature implements Comparable<Creature> {
 
     public long extract(int offset, int length) {
         long result = 0;
-        for (int i = 0; i < length; ++i) {
+        for (var i = 0; i < length; ++i) {
             result = (result << 1) | (dna[offset + i] ? 1 : 0);
         }
         return result;
     }
 
     public void splice(int offset, int length, long sequence) {
-        int index = offset + length - 1;
-        for (int i = 0; i < length; ++i) {
-            dna[index - i] = (0x1 & sequence >> i) != 0;
-        }
+        var index = offset + length - 1;
+        IntStream.range(0, length).forEach(i -> dna[index - i] = (0x01 & sequence >> i) != 0);
     }
 
     public void configure(String sequence) {
@@ -60,9 +59,7 @@ public class Creature implements Comparable<Creature> {
     }
 
     public void configure(String sequence, int offset) {
-        for (int i = 0; i < sequence.length(); i++) {
-            dna[offset + i] = sequence.charAt(i) != '0';
-        }
+        IntStream.range(0, sequence.length()).forEach(i -> dna[offset + i] = sequence.charAt(i) != '0');
     }
 
     public String describe() {
@@ -70,11 +67,15 @@ public class Creature implements Comparable<Creature> {
     }
 
     public String describe(int offset, int length) {
-        char[] chars = new char[length];
-        for (int i = 0; i < length; i++) {
-            chars[i] = isSet(offset + i) ? '1' : '0';
-        }
-        return new String(chars);
+        return IntStream.range(offset, offset + length)
+                        .mapToObj(i -> dna[i] ? '1' : '0')
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Creature{dna=%s, fitness=%s}", Arrays.toString(dna), fitness);
     }
 
     @Override

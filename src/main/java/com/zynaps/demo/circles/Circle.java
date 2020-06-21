@@ -15,7 +15,7 @@ class Circle {
     }
 
     public Circle(Creature creature, double multiplier) {
-        long dna = creature.extract(0, 63);
+        var dna = creature.extract(0, 63);
         x = multiplier * (0x1FFFFF & dna);
         y = multiplier * (0x1FFFFF & dna >> 21);
         radius = multiplier * (0x1FFFFF & dna >> 42);

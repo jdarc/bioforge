@@ -1,15 +1,15 @@
 # BioForge (1.0.0)
 Versatile, compact and easy to use Genetic Algorithm and Genetic Programming engine.
-Simple things are beautiful things, a handful of classes constitute the entire engine!
-Minimal amount of configuration and composition to get something running!
+Simple things are beautiful things, a handful of classes constitutes the entire engine!
+A minimal amount of configuration and composition to get something running!
 
 ## License
 Licensed under the Apache 2.0 License.
 
 ## Requirements
-*  **JRE 8**: Java 8 Runtime for using the library and running demonstration programs.
-*  **JDK 8**: Java 8 Development Kit for compilation of library and programs using the library.
-*  [**MAVEN 3.3.9**](https://maven.apache.org/): Project and dependancy management tool from the Apache Software Foundation.
+*  [**Jave 14**](https://sdkman.io/) runtime for using the library and running demonstration programs.
+*  [**Jave 14**](https://sdkman.io/) development kit for compilation of library and programs.
+*  [**MAVEN 3.6.3**](https://maven.apache.org/) for project and dependancy management.
 
 ## Demos
 Ensure you have successfully compiled the project before running the demonstrations by executing:
@@ -43,9 +43,9 @@ This demonstration attempts to find an optimal solution to what is known as the 
 ![](https://dl.dropboxusercontent.com/u/6389075/worms.png)
 > mvn exec:exec -Dworms
 
-A demonstration of Genetic Programming and emergent behaviour. This experiment attempts to evolve worm like creatures that navigate a procedurally generated 2D world, using cellular automata, avoiding obstacles whilst searching for food.
+A demonstration of Genetic Programming and emergent behaviour. This experiment attempts to evolve worm like creatures that navigate a procedurally generated 2D world, using cellular automata, avoiding obstacles whilst searching for the food.
 
-**Minimize** the window to prevent replay of current generations champion and thus speed up evolution cycles.
+**Minimize** the window to prevent the replay of current generations champion and thus speed up evolution cycles.
 
 **Maximize** the window to cause replay of the current generations champion, please note that it might take a while after you maximize for the champion to replay depending on the overall fitness of that generation.
 

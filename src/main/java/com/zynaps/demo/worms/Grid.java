@@ -28,12 +28,12 @@ class Grid {
     }
 
     public boolean isFree(int x, int y) {
-        int gs = get(x, y);
+        var gs = get(x, y);
         return (gs == FREE) || (gs == FOOD);
     }
 
     public boolean isObstacle(int x, int y) {
-        int gs = get(x, y);
+        var gs = get(x, y);
         return (gs == WALL) || (gs == OBSTACLE);
     }
 
@@ -57,18 +57,18 @@ class Grid {
     }
 
     public void generate() {
-        Automata automata = new Automata(GRID_SIZE - 2, GRID_SIZE - 2);
+        var automata = new Automata(GRID_SIZE - 2, GRID_SIZE - 2);
         automata.seed = String.valueOf(System.currentTimeMillis());
         automata.randomFillPercent = 49;
-        int[][] map = automata.generateMap();
+        var map = automata.generateMap();
 
-        for (int x = 0; x < map.length; ++x) {
-            for (int y = 0; y < map[0].length; ++y) {
+        for (var x = 0; x < map.length; ++x) {
+            for (var y = 0; y < map[0].length; ++y) {
                 terrain[y * GRID_SIZE + x] = map[x][y] == 1 ? OBSTACLE : FOOD;
             }
         }
 
-        for (int p = 0; p < GRID_SIZE; ++p) {
+        for (var p = 0; p < GRID_SIZE; ++p) {
             terrain[p] = terrain[0xFF * GRID_SIZE + p] = terrain[p * GRID_SIZE] = terrain[p * GRID_SIZE + 0xFF] = WALL;
         }
     }

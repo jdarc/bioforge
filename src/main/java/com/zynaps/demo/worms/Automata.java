@@ -1,6 +1,12 @@
 package com.zynaps.demo.worms;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Random;
 
 class Automata {
 
@@ -23,7 +29,7 @@ class Automata {
         map = new int[width][height];
         randomFillMap();
 
-        for (int i = 0; i < 5; i++) {
+        for (var i = 0; i < 5; i++) {
             smoothMap();
         }
 
@@ -31,11 +37,11 @@ class Automata {
 
         processMap();
 
-        int borderSize = 1;
-        int[][] borderedMap = new int[width + borderSize * 2][height + borderSize * 2];
+        var borderSize = 1;
+        var borderedMap = new int[width + borderSize * 2][height + borderSize * 2];
 
-        for (int x = 0; x < borderedMap.length; x++) {
-            for (int y = 0; y < borderedMap[0].length; y++) {
+        for (var x = 0; x < borderedMap.length; x++) {
+            for (var y = 0; y < borderedMap[0].length; y++) {
                 if (x >= borderSize && x < width + borderSize && y >= borderSize && y < height + borderSize) {
                     borderedMap[x][y] = map[x - borderSize][y - borderSize];
                 } else {
@@ -48,22 +54,22 @@ class Automata {
     }
 
     private void processMap() {
-        List<List<Coordinate>> wallRegions = getRegions(1);
-        int wallThresholdSize = 50;
+        var wallRegions = getRegions(1);
+        var wallThresholdSize = 50;
 
         wallRegions.stream().filter(wallRegion -> wallRegion.size() < wallThresholdSize).forEach(wallRegion -> {
-            for (Coordinate tile : wallRegion) {
+            for (var tile : wallRegion) {
                 map[tile.tileX][tile.tileY] = 0;
             }
         });
 
-        List<List<Coordinate>> roomRegions = getRegions(0);
-        int roomThresholdSize = 50;
+        var roomRegions = getRegions(0);
+        var roomThresholdSize = 50;
         List<Room> survivingRooms = new ArrayList<>();
 
-        for (List<Coordinate> roomRegion : roomRegions) {
+        for (var roomRegion : roomRegions) {
             if (roomRegion.size() < roomThresholdSize) {
-                for (Coordinate tile : roomRegion) {
+                for (var tile : roomRegion) {
                     map[tile.tileX][tile.tileY] = 1;
                 }
             } else {
@@ -86,7 +92,7 @@ class Automata {
         List<Room> roomListB = new ArrayList<>();
 
         if (forceAccessibilityFromMainRoom) {
-            for (Room room : allRooms) {
+            for (var room : allRooms) {
                 if (room.isAccessibleFromMainRoom) {
                     roomListB.add(room);
                 } else {
@@ -98,14 +104,14 @@ class Automata {
             roomListB = allRooms;
         }
 
-        int bestDistance = 0;
-        Coordinate bestTileA = new Coordinate(0, 0);
-        Coordinate bestTileB = new Coordinate(0, 0);
-        Room bestRoomA = new Room();
-        Room bestRoomB = new Room();
-        boolean possibleConnectionFound = false;
+        var bestDistance = 0;
+        var bestTileA = new Coordinate(0, 0);
+        var bestTileB = new Coordinate(0, 0);
+        var bestRoomA = new Room();
+        var bestRoomB = new Room();
+        var possibleConnectionFound = false;
 
-        for (Room roomA : roomListA) {
+        for (var roomA : roomListA) {
             if (!forceAccessibilityFromMainRoom) {
                 possibleConnectionFound = false;
                 if (roomA.connectedRooms.size() > 0) {
@@ -113,16 +119,16 @@ class Automata {
                 }
             }
 
-            for (Room roomB : roomListB) {
+            for (var roomB : roomListB) {
                 if (roomA == roomB || roomA.IsConnected(roomB)) {
                     continue;
                 }
 
-                for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.size(); tileIndexA++) {
-                    for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.size(); tileIndexB++) {
-                        Coordinate tileA = roomA.edgeTiles.get(tileIndexA);
-                        Coordinate tileB = roomB.edgeTiles.get(tileIndexB);
-                        int distanceBetweenRooms = (int) (Math.pow(tileA.tileX - tileB.tileX, 2) + Math.pow(tileA.tileY - tileB.tileY, 2));
+                for (var tileIndexA = 0; tileIndexA < roomA.edgeTiles.size(); tileIndexA++) {
+                    for (var tileIndexB = 0; tileIndexB < roomB.edgeTiles.size(); tileIndexB++) {
+                        var tileA = roomA.edgeTiles.get(tileIndexA);
+                        var tileB = roomB.edgeTiles.get(tileIndexB);
+                        var distanceBetweenRooms = (int) (Math.pow(tileA.tileX - tileB.tileX, 2) + Math.pow(tileA.tileY - tileB.tileY, 2));
 
                         if (distanceBetweenRooms < bestDistance || !possibleConnectionFound) {
                             bestDistance = distanceBetweenRooms;
@@ -152,18 +158,18 @@ class Automata {
 
     private void createPassage(Room roomA, Room roomB, Coordinate tileA, Coordinate tileB) {
         Room.ConnectRooms(roomA, roomB);
-        List<Coordinate> line = getLine(tileA, tileB);
-        for (Coordinate c : line) {
+        var line = getLine(tileA, tileB);
+        for (var c : line) {
             drawCircle(c, 5);
         }
     }
 
     private void drawCircle(Coordinate c, int r) {
-        for (int x = -r; x <= r; x++) {
-            for (int y = -r; y <= r; y++) {
+        for (var x = -r; x <= r; x++) {
+            for (var y = -r; y <= r; y++) {
                 if (x * x + y * y <= r * r) {
-                    int drawX = c.tileX + x;
-                    int drawY = c.tileY + y;
+                    var drawX = c.tileX + x;
+                    var drawY = c.tileY + y;
                     if (isInMapRange(drawX, drawY)) {
                         map[drawX][drawY] = 0;
                     }
@@ -175,18 +181,18 @@ class Automata {
     private List<Coordinate> getLine(Coordinate from, Coordinate to) {
         List<Coordinate> line = new ArrayList<>();
 
-        int x = from.tileX;
-        int y = from.tileY;
+        var x = from.tileX;
+        var y = from.tileY;
 
-        int dx = to.tileX - from.tileX;
-        int dy = to.tileY - from.tileY;
+        var dx = to.tileX - from.tileX;
+        var dy = to.tileY - from.tileY;
 
-        boolean inverted = false;
-        int step = (int) Math.signum(dx);
-        int gradientStep = (int) Math.signum(dy);
+        var inverted = false;
+        var step = (int) Math.signum(dx);
+        var gradientStep = (int) Math.signum(dy);
 
-        int longest = Math.abs(dx);
-        int shortest = Math.abs(dy);
+        var longest = Math.abs(dx);
+        var shortest = Math.abs(dy);
 
         if (longest < shortest) {
             inverted = true;
@@ -197,8 +203,8 @@ class Automata {
             gradientStep = (int) Math.signum(dx);
         }
 
-        int gradientAccumulation = longest / 2;
-        for (int i = 0; i < longest; i++) {
+        var gradientAccumulation = longest / 2;
+        for (var i = 0; i < longest; i++) {
             line.add(new Coordinate(x, y));
 
             if (inverted) {
@@ -223,15 +229,15 @@ class Automata {
 
     private List<List<Coordinate>> getRegions(int tileType) {
         List<List<Coordinate>> regions = new ArrayList<>();
-        int[][] mapFlags = new int[width][height];
+        var mapFlags = new int[width][height];
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
                 if (mapFlags[x][y] == 0 && map[x][y] == tileType) {
-                    List<Coordinate> newRegion = getRegionTiles(x, y);
+                    var newRegion = getRegionTiles(x, y);
                     regions.add(newRegion);
 
-                    for (Coordinate tile : newRegion) {
+                    for (var tile : newRegion) {
                         mapFlags[tile.tileX][tile.tileY] = 1;
                     }
                 }
@@ -243,19 +249,19 @@ class Automata {
 
     private List<Coordinate> getRegionTiles(int startX, int startY) {
         List<Coordinate> tiles = new ArrayList<>();
-        int[][] mapFlags = new int[width][height];
-        int tileType = map[startX][startY];
+        var mapFlags = new int[width][height];
+        var tileType = map[startX][startY];
 
         Queue<Coordinate> queue = new LinkedList<>();
         queue.add(new Coordinate(startX, startY));
         mapFlags[startX][startY] = 1;
 
         while (queue.size() > 0) {
-            Coordinate tile = queue.remove();
+            var tile = queue.remove();
             tiles.add(tile);
 
-            for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++) {
-                for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++) {
+            for (var x = tile.tileX - 1; x <= tile.tileX + 1; x++) {
+                for (var y = tile.tileY - 1; y <= tile.tileY + 1; y++) {
                     if (isInMapRange(x, y) && (y == tile.tileY || x == tile.tileX)) {
                         if (mapFlags[x][y] == 0 && map[x][y] == tileType) {
                             mapFlags[x][y] = 1;
@@ -278,9 +284,9 @@ class Automata {
             seed = String.valueOf(new Date().getTime());
         }
 
-        Random pseudoRandom = new Random(seed.hashCode());
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        var pseudoRandom = new Random(seed.hashCode());
+        for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
                 if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
                     map[x][y] = 1;
                 } else {
@@ -291,9 +297,9 @@ class Automata {
     }
 
     private void smoothMap() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int neighbourWallTiles = getSurroundingWallCount(x, y);
+        for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
+                var neighbourWallTiles = getSurroundingWallCount(x, y);
                 if (neighbourWallTiles > 4) {
                     map[x][y] = 1;
                 } else if (neighbourWallTiles < 4) {
@@ -304,9 +310,9 @@ class Automata {
     }
 
     private int getSurroundingWallCount(int gridX, int gridY) {
-        int wallCount = 0;
-        for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++) {
-            for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++) {
+        var wallCount = 0;
+        for (var neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++) {
+            for (var neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++) {
                 if (isInMapRange(neighbourX, neighbourY)) {
                     if (neighbourX != gridX || neighbourY != gridY) {
                         wallCount += map[neighbourX][neighbourY];
@@ -338,9 +344,9 @@ class Automata {
             connectedRooms = new ArrayList<>();
 
             edgeTiles = new ArrayList<>();
-            for (Coordinate tile : tiles) {
-                for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++) {
-                    for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++) {
+            for (var tile : tiles) {
+                for (var x = tile.tileX - 1; x <= tile.tileX + 1; x++) {
+                    for (var y = tile.tileY - 1; y <= tile.tileY + 1; y++) {
                         if (x == tile.tileX || y == tile.tileY) {
                             if (map[x][y] == 1) {
                                 edgeTiles.add(tile);

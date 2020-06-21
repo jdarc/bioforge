@@ -1,53 +1,52 @@
 package com.zynaps.bioforge.schemes;
 
-import com.zynaps.bioforge.CannedRandom;
+import com.zynaps.bioforge.CannedRandomNumber;
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.CreatureBuilder;
-import com.zynaps.bioforge.generators.RandomGenerator;
-import org.junit.Test;
-
+import com.zynaps.bioforge.generators.RandomNumberGenerator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public class RouletteSelectionTest {
 
     @Test
-    public void testFromZeroFitness() throws Exception {
+    public void testFromZeroFitness() {
         CreatureBuilder builder = new CreatureBuilder();
         List<Creature> creatures = new ArrayList<>();
         creatures.add(builder.withFitness(20.0).build());
         creatures.add(builder.withFitness(0.0).build());
         creatures.add(builder.withFitness(30.0).build());
         creatures.add(builder.withFitness(10.0).build());
-        RandomGenerator random = new CannedRandom(0.0, 0.0, 0.49, 0.49, 0.83, 0.83, 0.99, 0.99);
+        RandomNumberGenerator random = new CannedRandomNumber(0.0, 0.0, 0.49, 0.49, 0.83, 0.83, 0.99, 0.99);
         check(new RouletteSelection(0.0).apply(creatures, random), creatures);
     }
 
     @Test
-    public void testAboveZeroFitness() throws Exception {
+    public void testAboveZeroFitness() {
         CreatureBuilder builder = new CreatureBuilder();
         List<Creature> creatures = new ArrayList<>();
         creatures.add(builder.withFitness(15.0).build());
         creatures.add(builder.withFitness(5.0).build());
         creatures.add(builder.withFitness(20.0).build());
         creatures.add(builder.withFitness(10.0).build());
-        RandomGenerator random = new CannedRandom(0.0, 0.0, 0.48, 0.48, 0.80, 0.80, 0.99, 0.99);
+        RandomNumberGenerator random = new CannedRandomNumber(0.0, 0.0, 0.48, 0.48, 0.80, 0.80, 0.99, 0.99);
         check(new RouletteSelection(0.0).apply(creatures, random), creatures);
     }
 
     @Test
-    public void testFullRangeFitness() throws Exception {
+    public void testFullRangeFitness() {
         CreatureBuilder builder = new CreatureBuilder();
         List<Creature> creatures = new ArrayList<>();
         creatures.add(builder.withFitness(50.0).build());
         creatures.add(builder.withFitness(-10.0).build());
         creatures.add(builder.withFitness(100.0).build());
         creatures.add(builder.withFitness(0.0).build());
-        RandomGenerator random = new CannedRandom(0.0, 0.0, 0.61, 0.61, 0.95, 0.95, 0.995, 0.995);
+        RandomNumberGenerator random = new CannedRandomNumber(0.0, 0.0, 0.61, 0.61, 0.95, 0.95, 0.995, 0.995);
 
         List<Creature> result = new RouletteSelection(0.0).apply(creatures, random);
 
@@ -55,14 +54,14 @@ public class RouletteSelectionTest {
     }
 
     @Test
-    public void testUpToZeroFitness() throws Exception {
+    public void testUpToZeroFitness() {
         CreatureBuilder builder = new CreatureBuilder();
         List<Creature> creatures = new ArrayList<>();
         creatures.add(builder.withFitness(-50.0).build());
         creatures.add(builder.withFitness(-10.0).build());
         creatures.add(builder.withFitness(-30.0).build());
         creatures.add(builder.withFitness(0.0).build());
-        RandomGenerator random = new CannedRandom(0.0, 0.0, 0.48, 0.48, 0.81, 0.81, 0.995, 0.995);
+        RandomNumberGenerator random = new CannedRandomNumber(0.0, 0.0, 0.48, 0.48, 0.81, 0.81, 0.995, 0.995);
 
         List<Creature> result = new RouletteSelection(0.0).apply(creatures, random);
 
@@ -70,14 +69,14 @@ public class RouletteSelectionTest {
     }
 
     @Test
-    public void testBelowZeroFitness() throws Exception {
+    public void testBelowZeroFitness() {
         CreatureBuilder builder = new CreatureBuilder();
         List<Creature> creatures = new ArrayList<>();
         creatures.add(builder.withFitness(-50.0).build());
         creatures.add(builder.withFitness(-10.0).build());
         creatures.add(builder.withFitness(-30.0).build());
         creatures.add(builder.withFitness(-5.0).build());
-        RandomGenerator random = new CannedRandom(0.0, 0.0, 0.48, 0.48, 0.81, 0.81, 0.995, 0.995);
+        RandomNumberGenerator random = new CannedRandomNumber(0.0, 0.0, 0.48, 0.48, 0.81, 0.81, 0.995, 0.995);
 
         List<Creature> result = new RouletteSelection(0.0).apply(creatures, random);
 
@@ -85,14 +84,14 @@ public class RouletteSelectionTest {
     }
 
     @Test
-    public void testElitism() throws Exception {
+    public void testElitism() {
         CreatureBuilder builder = new CreatureBuilder();
         List<Creature> creatures = new ArrayList<>();
         creatures.add(builder.withFitness(5.0).build());
         creatures.add(builder.withFitness(5.1).build());
         creatures.add(builder.withFitness(5.2).build());
         creatures.add(builder.withFitness(5.3).build());
-        RandomGenerator random = new CannedRandom(0.0, 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75);
+        RandomNumberGenerator random = new CannedRandomNumber(0.0, 0.0, 0.25, 0.25, 0.5, 0.5, 0.75, 0.75);
 
         List<Creature> result = new RouletteSelection(0.25).apply(creatures, random);
 

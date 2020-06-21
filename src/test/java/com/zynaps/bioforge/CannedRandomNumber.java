@@ -1,13 +1,13 @@
 package com.zynaps.bioforge;
 
-import com.zynaps.bioforge.generators.RandomGenerator;
+import com.zynaps.bioforge.generators.RandomNumberGenerator;
 
-public class CannedRandom implements RandomGenerator {
+public class CannedRandomNumber implements RandomNumberGenerator {
 
     private int index;
     private final double[] canned;
 
-    public CannedRandom(double... values) {
+    public CannedRandomNumber(double... values) {
         index = 0;
         canned = values;
     }

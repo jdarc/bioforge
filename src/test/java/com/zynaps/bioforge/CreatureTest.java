@@ -1,7 +1,5 @@
 package com.zynaps.bioforge;
 
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -9,10 +7,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 
 public class CreatureTest {
 
@@ -65,7 +64,7 @@ public class CreatureTest {
     }
 
     @Test
-    public void testMimic() throws Exception {
+    public void testMimic() {
         double fitness = 20.0 * ThreadLocalRandom.current().nextDouble() - 10.0;
 
         Creature creature = new Creature(8);

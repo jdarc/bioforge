@@ -1,9 +1,13 @@
 package com.zynaps.demo.worms;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
+import javax.swing.JPanel;
 
 class GridView extends JPanel {
 
@@ -16,8 +20,8 @@ class GridView extends JPanel {
         setForeground(Color.WHITE);
         setPreferredSize(new Dimension(800, 600));
         setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
-        GraphicsEnvironment localGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice defaultScreenDevice = localGraphicsEnvironment.getDefaultScreenDevice();
+        var localGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        var defaultScreenDevice = localGraphicsEnvironment.getDefaultScreenDevice();
         image = defaultScreenDevice.getDefaultConfiguration().createCompatibleImage(256, 256);
     }
 

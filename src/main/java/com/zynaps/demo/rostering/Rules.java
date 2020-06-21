@@ -1,11 +1,10 @@
 package com.zynaps.demo.rostering;
 
-import org.joda.time.Hours;
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.joda.time.Hours;
 
 class Rules {
 
@@ -25,18 +24,18 @@ class Rules {
     }
 
     private double processShiftRules(List<Assignment> assignments) {
-        double fitness = 0.0;
-        for (Shift shift : shifts) {
-            List<Employee> allocated = assignments.stream()
-                                                  .filter(a -> a.shift.id == shift.id)
-                                                  .map(assignment -> assignment.employee)
-                                                  .collect(Collectors.toList());
+        var fitness = 0.0;
+        for (var shift : shifts) {
+            var allocated = assignments.stream()
+                                       .filter(a -> a.shift.id == shift.id)
+                                       .map(assignment -> assignment.employee)
+                                       .collect(Collectors.toList());
             if (allocated.size() > 0) {
                 if (duplicates(allocated)) {
                     fitness -= HARD_SCORE;
                 }
 
-                for (Employee employee : allocated) {
+                for (var employee : allocated) {
                     if (employee.isAbsentDuring(shift)) {
                         fitness -= HARD_SCORE;
                     }
@@ -51,14 +50,14 @@ class Rules {
     }
 
     private double processEmployeeRules(List<Assignment> assignments) {
-        double fitness = 0.0;
-        for (Employee employee : employees) {
-            List<Shift> shifts = assignments.stream().filter(a -> a.employee.id == employee.id)
-                                            .map(assignment -> assignment.shift)
-                                            .sorted(Comparator.comparing(a -> a.start))
-                                            .collect(Collectors.toList());
-            for (int i = 1; i < shifts.size(); ++i) {
-                int timeBetween = Hours.hoursBetween(shifts.get(i - 1).end, shifts.get(i).start).getHours();
+        var fitness = 0.0;
+        for (var employee : employees) {
+            var shifts = assignments.stream().filter(a -> a.employee.id == employee.id)
+                                    .map(assignment -> assignment.shift)
+                                    .sorted(Comparator.comparing(a -> a.start))
+                                    .collect(Collectors.toList());
+            for (var i = 1; i < shifts.size(); ++i) {
+                var timeBetween = Hours.hoursBetween(shifts.get(i - 1).end, shifts.get(i).start).getHours();
                 if (timeBetween < restTime) {
                     fitness -= HARD_SCORE;
                 }
@@ -69,10 +68,10 @@ class Rules {
     }
 
     public boolean duplicates(List<Employee> items) {
-        int size = items.size();
-        for (int i = 0; i < size - 1; ++i) {
-            Employee item = items.get(i);
-            for (int j = i + 1; j < size; ++j) {
+        var size = items.size();
+        for (var i = 0; i < size - 1; ++i) {
+            var item = items.get(i);
+            for (var j = i + 1; j < size; ++j) {
                 if (item.id == items.get(j).id) {
                     return true;
                 }

@@ -1,43 +1,39 @@
 package com.zynaps.bioforge;
 
-import com.zynaps.bioforge.generators.RandomGenerator;
+import com.zynaps.bioforge.generators.RandomNumberGenerator;
 import com.zynaps.bioforge.operators.CrossoverOperator;
 import com.zynaps.bioforge.operators.MutationOperator;
+import com.zynaps.bioforge.operators.NOPCrossoverOperator;
+import com.zynaps.bioforge.operators.NOPMutationOperator;
 import com.zynaps.bioforge.schemes.SelectionScheme;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.ToDoubleFunction;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Island {
 
     final Tribe[] tribes;
-    final Tribe firstTribe;
     final Creature champion;
     CrossoverOperator crossoverOperator;
     MutationOperator mutationOperator;
     SelectionScheme scheme;
-    RandomGenerator random;
-    ExecutorService service;
+    RandomNumberGenerator random;
     double crossoverRate;
     double mutationRate;
     int generation;
 
     Island(int tribes, int populationSize, int genomeSize) {
         this.tribes = new Tribe[tribes];
-        for (int i = 0; i < tribes; ++i) {
-            this.tribes[i] = new Tribe(populationSize, genomeSize);
-        }
-        firstTribe = this.tribes[0];
+        IntStream.range(0, tribes).forEach(i -> this.tribes[i] = new Tribe(populationSize, genomeSize));
         champion = new Creature(genomeSize);
-        crossoverOperator = (mum, dad, kid, rnd, rate) -> {
-        };
-        mutationOperator = (creature, rnd, rate) -> {
-        };
+        crossoverOperator = new NOPCrossoverOperator();
+        mutationOperator = new NOPMutationOperator();
         scheme = (creatures, rnd) -> new ArrayList<>(creatures);
         random = () -> 0.0;
     }
@@ -78,24 +74,16 @@ public class Island {
         this.scheme = scheme;
     }
 
-    public void useRandomGenerator(RandomGenerator random) {
+    public void useRandomGenerator(RandomNumberGenerator random) {
         this.random = random;
     }
 
     public void zero() {
-        for (Tribe tribe : tribes) {
-            tribe.parents.forEach(Creature::zero);
-        }
+        Arrays.stream(tribes).forEach(tribe -> tribe.parents.forEach(Creature::zero));
     }
 
     public void nuke() {
-        for (Tribe tribe : tribes) {
-            tribe.parents.forEach(creature -> {
-                for (int i = 0; i < creature.dna.length; ++i) {
-                    creature.dna[i] = random.nextDouble() > 0.5;
-                }
-            });
-        }
+        Arrays.stream(tribes).forEach(tribe -> tribe.parents.forEach(this::nukeCreature));
     }
 
     public void evolve(ToDoubleFunction<Creature> callback) {
@@ -107,25 +95,28 @@ public class Island {
             }
             ++generation;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+    }
+
+    private void nukeCreature(Creature creature) {
+        IntStream.range(0, creature.dna.length).forEach(i -> creature.dna[i] = random.nextDouble() > 0.5);
     }
 
     private void evolveTribe(ToDoubleFunction<Creature> callback) {
-        evolve(firstTribe, callback);
-        champion.mimic(firstTribe.champion);
+        evolve(tribes[0], callback);
+        champion.mimic(tribes[0].champion);
     }
 
-    private void evolveTribes(ToDoubleFunction<Creature> callback) throws InterruptedException {
-        List<Callable<Object>> todo = new ArrayList<>(tribes.length);
-        for (Tribe tribe : tribes) {
-            todo.add(Executors.callable(() -> evolve(tribe, callback)));
-        }
-        (service = service == null ? new ForkJoinPool() : service).invokeAll(todo);
+    private void evolveTribes(ToDoubleFunction<Creature> callback) {
+        List<Callable<Object>> todo = Arrays.stream(tribes)
+                                            .map(tribe -> Executors.callable(() -> evolve(tribe, callback)))
+                                            .collect(Collectors.toCollection(() -> new ArrayList<>(tribes.length)));
+        ForkJoinPool.commonPool().invokeAll(todo);
 
-        double best = Double.NEGATIVE_INFINITY;
-        for (Tribe tribe : tribes) {
-            Creature creature = tribe.champion;
+        var best = Double.NEGATIVE_INFINITY;
+        for (var tribe : tribes) {
+            var creature = tribe.champion;
             if (creature.fitness >= best) {
                 best = creature.fitness;
                 champion.mimic(creature);
@@ -133,13 +124,13 @@ public class Island {
         }
 
         if (random.nextDouble() > 0.5) {
-            Tribe tribeTo = tribes[random.nextInt(tribes.length)];
-            Tribe tribeFrom = tribes[random.nextInt(tribes.length)];
-            for (Creature creature : tribeTo.parents) {
+            var tribeTo = tribes[random.nextInt(tribes.length)];
+            var tribeFrom = tribes[random.nextInt(tribes.length)];
+            for (var creature : tribeTo.parents) {
                 creature.mimic(tribeTo.champion);
                 if (random.nextDouble() < 0.5) {
-                    int offset = random.nextInt(creature.getGenomeSize());
-                    int length = random.nextInt(creature.getGenomeSize() - offset + 1);
+                    var offset = random.nextInt(creature.getGenomeSize());
+                    var length = random.nextInt(creature.getGenomeSize() - offset + 1);
                     System.arraycopy(tribeFrom.champion.dna, offset, creature.dna, offset, length);
                 }
             }

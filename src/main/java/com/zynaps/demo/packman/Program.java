@@ -1,6 +1,6 @@
 package com.zynaps.demo.packman;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 class Program {
 

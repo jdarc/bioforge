@@ -23,9 +23,9 @@ class Formula {
     }
 
     private static boolean areIndicesDistinct(int... indices) {
-        int[] accumulator = new int[indices.length];
-        int mask = 0;
-        for (int index : indices) {
+        var accumulator = new int[indices.length];
+        var mask = 0;
+        for (var index : indices) {
             mask |= ++accumulator[index];
         }
         return mask == 1;
@@ -37,12 +37,12 @@ class Formula {
 
     public String toEquation(int[] numbers) {
         return String.format("%d%s%d%s%d%s%d%s%d%s%d",
-                numbers[a], OPERANDS[op1],
-                numbers[b], OPERANDS[op2],
-                numbers[c], OPERANDS[op3],
-                numbers[d], OPERANDS[op4],
-                numbers[e], OPERANDS[op5],
-                numbers[f]
+                             numbers[a], OPERANDS[op1],
+                             numbers[b], OPERANDS[op2],
+                             numbers[c], OPERANDS[op3],
+                             numbers[d], OPERANDS[op4],
+                             numbers[e], OPERANDS[op5],
+                             numbers[f]
         );
     }
 

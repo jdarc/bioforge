@@ -8,9 +8,9 @@ class Program {
         System.out.println();
         System.out.println("How many large numbers, please specify 1, 2, 3, or 4...");
 
-        Scanner input = new Scanner(System.in);
+        var input = new Scanner(System.in);
 
-        Game game = new Game(input.nextInt());
+        var game = new Game(input.nextInt());
         System.out.println(game.describe());
 
         input.nextLine();

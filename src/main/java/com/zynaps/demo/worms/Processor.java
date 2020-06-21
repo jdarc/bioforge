@@ -28,15 +28,15 @@ class Processor {
     }
 
     public void run(int cycles) {
-        int pc = 0;
-        int cycle = 0;
+        var pc = 0;
+        var cycle = 0;
         while (cycle++ < cycles) {
-            final int instruction = instructions[pc++];
-            final int opc = (0x01F & instruction >> 27);
-            final int dst = (0x01F & instruction >> 22);
-            final int opa = (0x01F & instruction >> 17);
-            final int opb = (0x01F & instruction >> 12);
-            final int mem = (0xFFF & instruction);
+            final var instruction = instructions[pc++];
+            final var opc = (0x01F & instruction >> 27);
+            final var dst = (0x01F & instruction >> 22);
+            final var opa = (0x01F & instruction >> 17);
+            final var opb = (0x01F & instruction >> 12);
+            final var mem = (0xFFF & instruction);
             switch (opc) {
                 case 0:
                     return;

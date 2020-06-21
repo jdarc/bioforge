@@ -1,6 +1,6 @@
 package com.zynaps.demo.circles;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 class Program {
     public static void main(String[] args) {

@@ -1,15 +1,17 @@
 package com.zynaps.demo.worms;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Frame;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 class Program {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            GridView view = new GridView();
-            Controller controller = new Controller(view);
-            JFrame frame = new JFrame("Genetic Programming - Worms");
+            var view = new GridView();
+            var controller = new Controller(view);
+            var frame = new JFrame("Genetic Programming - Worms");
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.addWindowStateListener(e -> controller.replayChampion = (e.getNewState() & Frame.ICONIFIED) != Frame.ICONIFIED);
             frame.add(view);

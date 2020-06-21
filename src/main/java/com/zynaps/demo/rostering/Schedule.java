@@ -17,10 +17,10 @@ class Schedule {
     }
 
     public Shift getShiftById(int id) {
-        return shifts.containsKey(id) ? shifts.get(id) : Shift.NULL;
+        return shifts.getOrDefault(id, Shift.NULL);
     }
 
     public Employee getEmployeeById(int id) {
-        return employees.containsKey(id) ? employees.get(id) : Employee.NULL;
+        return employees.getOrDefault(id, Employee.NULL);
     }
 }

@@ -1,9 +1,9 @@
 package com.zynaps.bioforge.generators;
 
-public interface RandomGenerator {
+public interface RandomNumberGenerator {
 
     default int nextInt(int bound) {
-        return bound <= 0 ? 0 : (int)(bound * nextDouble());
+        return bound <= 0 ? 0 : (int) (bound * nextDouble());
     }
 
     double nextDouble();

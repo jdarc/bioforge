@@ -11,9 +11,9 @@ class Edge {
         this.p1 = p1;
         this.p2 = p2;
         center = new Vertex((p1.x + p2.x) * 0.5, (p1.y + p2.y) * 0.5);
-        double x = p2.x - p1.x;
-        double y = p2.y - p1.y;
-        double inv = 1.0 / Math.sqrt(x * x + y * y);
+        var x = p2.x - p1.x;
+        var y = p2.y - p1.y;
+        var inv = 1.0 / Math.sqrt(x * x + y * y);
         normal = new Vertex(-y * inv, x * inv);
     }
 }
