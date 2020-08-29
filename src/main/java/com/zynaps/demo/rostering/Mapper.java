@@ -16,11 +16,9 @@ class Mapper {
 
     public Mapper(Schedule schedule) {
         this.schedule = schedule;
-        var shiftStream = schedule.shifts.values().stream();
-        var employeeStream = schedule.employees.values().stream();
-        allocs = shiftStream.mapToInt(shift -> shift.required).sum();
-        shiftBits = bitsNeeded(shiftStream.max(comparingInt(a -> a.id)).orElseThrow().id);
-        employeeBits = bitsNeeded(employeeStream.max(comparingInt(a -> a.id)).orElseThrow().id);
+        allocs = schedule.shifts.values().stream().mapToInt(shift -> shift.required).sum();
+        shiftBits = bitsNeeded(schedule.shifts.values().stream().max(comparingInt(a -> a.id)).orElseThrow().id);
+        employeeBits = bitsNeeded(schedule.employees.values().stream().max(comparingInt(a -> a.id)).orElseThrow().id);
         genomeLength = allocs * (shiftBits + employeeBits);
     }
 
