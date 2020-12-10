@@ -1,5 +1,8 @@
 package com.zynaps.demo.circles;
 
+import javax.swing.JFrame;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -11,9 +14,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
-import javax.swing.JFrame;
-import javax.swing.Timer;
-import javax.swing.WindowConstants;
 
 class MainFrame extends JFrame implements KeyListener, ComponentListener {
 
@@ -21,9 +21,11 @@ class MainFrame extends JFrame implements KeyListener, ComponentListener {
 
     public MainFrame() {
         setTitle("Genetic Algorithm - Circles");
+        setBackground(new Color(250, 250, 235));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(MAXIMIZED_BOTH);
         setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
-        setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
+        setFont(new Font("Space Mono", Font.PLAIN, 15));
         pack();
         setLocationRelativeTo(null);
         setIgnoreRepaint(true);

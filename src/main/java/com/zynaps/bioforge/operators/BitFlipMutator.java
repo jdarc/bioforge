@@ -2,6 +2,7 @@ package com.zynaps.bioforge.operators;
 
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.generators.RandomNumberGenerator;
+
 import java.util.stream.IntStream;
 
 public class BitFlipMutator implements MutationOperator {

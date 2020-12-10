@@ -1,9 +1,10 @@
 package com.zynaps.demo.rostering;
 
+import org.joda.time.Interval;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.joda.time.Interval;
 
 class Employee {
 

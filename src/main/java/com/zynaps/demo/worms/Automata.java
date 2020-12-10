@@ -14,7 +14,7 @@ class Automata {
     public final int height;
 
     public String seed = "Automata";
-    public boolean useRandomSeed;
+    public boolean useRandomSeed = true;
 
     public int randomFillPercent = 50;
 
@@ -33,7 +33,7 @@ class Automata {
             smoothMap();
         }
 
-        drawCircle(new Coordinate(width >> 1, height >> 1), 5);
+        drawCircle(new Coordinate(width >> 1, height >> 1), 10);
 
         processMap();
 

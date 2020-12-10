@@ -6,7 +6,7 @@ import com.zynaps.bioforge.Island;
 
 class Controller {
 
-    private static final int GRID_CHANGE_MILLIS = 1000 * 60 * 5; // change every 5 minutes
+    private static final int GRID_CHANGE_MILLIS = 1000 * 60 * 5;
 
     private final int[] assembly;
     private final Grid grid;
@@ -25,13 +25,14 @@ class Controller {
         replayChampion = true;
         processor = new Processor();
         assembly = new int[Processor.PROGRAM_SIZE];
-        population = new Builder().tribes(1)
-                                  .populationSize(100)
-                                  .genomeSize(Processor.PROGRAM_SIZE * Processor.INSTRUCTION_SIZE)
-                                  .crossoverRate(0.5)
-                                  .mutationRate(0.0025)
-                                  .nuke(true)
-                                  .build();
+        population = new Builder()
+            .tribes(1)
+            .populationSize(300)
+            .genomeSize(Processor.PROGRAM_SIZE * Processor.INSTRUCTION_SIZE)
+            .crossoverRate(0.5)
+            .mutationRate(0.003)
+            .nuke(true)
+            .build();
     }
 
     public void stop() {
@@ -109,29 +110,24 @@ class Controller {
             processor.poke(18, worm.getFoodAntennae().getSe());
 
             processor.run(262144);
-            var turnPeek = processor.peek(30);
-            var movePeek = processor.peek(31);
+            var turnPeek = processor.peek(0);
 
-            if (turnPeek < -1.0) {
-                worm.turnRight();
-            } else if (turnPeek > 1.0) {
+            if (turnPeek < -512.0) {
                 worm.turnLeft();
+                worm.useEnergy(1);
+            } else if (turnPeek > 512.0) {
+                worm.turnRight();
+                worm.useEnergy(1);
             }
 
-            if (movePeek > 0.0) {
-                worm.moveForward();
-            } else {
-                fitness -= 50.0;
-            }
+            worm.moveForward();
+            worm.useEnergy(1);
+            fitness += 1.0;
 
-            if (grid.isObstacle(worm.getX(), worm.getY())) {
+            if (worm.getEnergy() <= 0 || grid.isObstacle(worm.getX(), worm.getY())) {
                 worm.kill();
             } else if (grid.isFood(worm.getX(), worm.getY())) {
-                worm.addEnergy(3);
-                fitness += 10.0;
-            } else if (grid.isFree(worm.getX(), worm.getY())) {
-                worm.useEnergy(1);
-                fitness += 2.0;
+                worm.addEnergy(5);
             }
         }
         return fitness;

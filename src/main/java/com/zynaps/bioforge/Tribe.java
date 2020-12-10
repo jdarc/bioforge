@@ -4,6 +4,7 @@ import com.zynaps.bioforge.generators.RandomNumberGenerator;
 import com.zynaps.bioforge.operators.CrossoverOperator;
 import com.zynaps.bioforge.operators.MutationOperator;
 import com.zynaps.bioforge.schemes.SelectionScheme;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToDoubleFunction;

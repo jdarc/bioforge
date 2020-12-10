@@ -1,5 +1,6 @@
 package com.zynaps.demo.packman;
 
+import javax.swing.JPanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 class Visualizer extends JPanel {
 
@@ -27,13 +27,13 @@ class Visualizer extends JPanel {
     @Override
     public void paint(Graphics g) {
 
-        var gx = (Graphics2D) g;
+        var gx = (Graphics2D)g;
         var saved = gx.getTransform();
 
         gx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         gx.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         gx.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        gx.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+        gx.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         gx.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         gx.setFont(getFont());
 
@@ -41,11 +41,11 @@ class Visualizer extends JPanel {
         var width = size.getWidth();
         var height = size.getHeight();
         var edge = Math.max(width, height);
-        gx.clearRect(0, 0, (int) width, (int) height);
+        gx.clearRect(0, 0, (int)width, (int)height);
 
         gx.translate(width * 0.5, height * 0.5);
         gx.scale(scale, -scale);
-        gx.setStroke(new BasicStroke((float) (1.0 / scale)));
+        gx.setStroke(new BasicStroke((float)(1.0 / scale)));
 
         var e = edge / (2.0 * scale);
 
@@ -61,13 +61,13 @@ class Visualizer extends JPanel {
             p.moveTo(e, l);
             p.lineTo(-e, l);
         }
-        gx.setColor(new Color(245, 245, 245));
+        gx.setColor(new Color(230, 230, 240));
         gx.draw(p);
 
         p.reset();
         var notch = 6.0 / scale;
         for (var l = 0.5; l < e; l += 0.5) {
-            var notch1 = l != (int) l ? notch * 0.5 : notch;
+            var notch1 = l != (int)l ? notch * 0.5 : notch;
             p.moveTo(-l, notch1);
             p.lineTo(-l, -notch1);
             p.moveTo(l, notch1);
@@ -109,36 +109,14 @@ class Visualizer extends JPanel {
 
     public void drawCircle(double x, double y, double radius) {
         addMarker(x, y);
+        setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 24));
+        addSolid(new Ellipse2D.Double(x - radius, y - radius, radius * 2, radius * 2));
+        setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));
         addWire(new Ellipse2D.Double(x - radius, y - radius, radius * 2, radius * 2));
-    }
-
-    public void drawPolyline(double[] x, double[] y) {
-        addPolyform(x, y, false);
     }
 
     public void drawString(String s, int x, int y) {
         drawables.add(new Text(s, x, y));
-    }
-
-    private void addPolyform(double[] x, double[] y, boolean closed) {
-        if (x == null || y == null || x.length != y.length) {
-            return;
-        }
-        if (x.length < 3) {
-            drawLine(x[0], y[0], x[1], y[1]);
-            return;
-        }
-        var path = new GeneralPath();
-        path.moveTo(x[0], y[0]);
-        addMarker(x[0], y[0]);
-        for (var i = 1; i < x.length; i++) {
-            path.lineTo(x[i], y[i]);
-            addMarker(x[i], y[i]);
-        }
-        if (closed) {
-            path.closePath();
-        }
-        addWire(path);
     }
 
     private void addMarker(double x, double y) {
@@ -156,7 +134,6 @@ class Visualizer extends JPanel {
     }
 
     private interface Drawable {
-
         void draw(Graphics2D g);
     }
 

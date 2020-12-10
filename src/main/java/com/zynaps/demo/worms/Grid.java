@@ -59,7 +59,7 @@ class Grid {
     public void generate() {
         var automata = new Automata(GRID_SIZE - 2, GRID_SIZE - 2);
         automata.seed = String.valueOf(System.currentTimeMillis());
-        automata.randomFillPercent = 49;
+        automata.randomFillPercent = 48;
         var map = automata.generateMap();
 
         for (var x = 0; x < map.length; ++x) {

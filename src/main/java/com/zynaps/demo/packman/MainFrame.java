@@ -1,14 +1,15 @@
 package com.zynaps.demo.packman;
 
+import javax.swing.JFrame;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JFrame;
-import javax.swing.Timer;
-import javax.swing.WindowConstants;
 
 class MainFrame extends JFrame {
 
@@ -17,6 +18,7 @@ class MainFrame extends JFrame {
 
     public MainFrame() {
         setTitle("Genetic Algorithm - Packman");
+        setFont(new Font("Space Mono", Font.PLAIN, 11));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
         addKeyListener(new KeyAdapter() {
@@ -33,7 +35,7 @@ class MainFrame extends JFrame {
             public void componentShown(ComponentEvent e) {
                 super.componentShown(e);
                 new Timer(0, ignore -> controller.evolve()).start();
-                new Timer(33, ignore -> render()).start();
+                new Timer(50, ignore -> render()).start();
             }
         });
         surface = new Visualizer();
@@ -51,7 +53,7 @@ class MainFrame extends JFrame {
                 surface.setColor(Color.RED);
                 surface.drawLine(edge.p1.x, edge.p1.y, edge.p2.x, edge.p2.y);
                 surface.setColor(Color.BLUE);
-                surface.drawLine(edge.center.x, edge.center.y, edge.center.x + edge.normal.x, edge.center.y + edge.normal.y);
+                surface.drawLine(edge.center.x, edge.center.y, edge.center.x - edge.normal.x, edge.center.y - edge.normal.y);
             }
             surface.setColor(Color.GREEN);
             var circles = controller.getChampion();

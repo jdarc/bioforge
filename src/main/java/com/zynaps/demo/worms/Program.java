@@ -1,9 +1,9 @@
 package com.zynaps.demo.worms;
 
-import java.awt.Frame;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import java.awt.Frame;
 
 class Program {
 

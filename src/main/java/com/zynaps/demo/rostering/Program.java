@@ -2,10 +2,11 @@ package com.zynaps.demo.rostering;
 
 import com.zynaps.bioforge.Builder;
 import com.zynaps.bioforge.schemes.RouletteSelection;
+import org.joda.time.format.DateTimeFormat;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.joda.time.format.DateTimeFormat;
 
 class Program {
 

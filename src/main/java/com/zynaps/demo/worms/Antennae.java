@@ -99,7 +99,7 @@ class Antennae {
         }
 
         switch (orientation) {
-            case EAST -> {
+            case EAST: {
                 sw = nwdist;
                 w = ndist;
                 nw = nedist;
@@ -108,7 +108,7 @@ class Antennae {
                 e = sdist;
                 se = swdist;
             }
-            case SOUTH -> {
+            case SOUTH: {
                 sw = nedist;
                 w = edist;
                 nw = sedist;
@@ -117,7 +117,7 @@ class Antennae {
                 e = wdist;
                 se = swdist;
             }
-            case WEST -> {
+            case WEST: {
                 sw = sedist;
                 w = sdist;
                 nw = swdist;
@@ -126,7 +126,7 @@ class Antennae {
                 e = ndist;
                 se = nedist;
             }
-            case NORTH -> {
+            case NORTH: {
                 sw = swdist;
                 w = wdist;
                 nw = nwdist;

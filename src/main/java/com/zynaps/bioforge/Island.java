@@ -6,6 +6,7 @@ import com.zynaps.bioforge.operators.MutationOperator;
 import com.zynaps.bioforge.operators.NOPCrossoverOperator;
 import com.zynaps.bioforge.operators.NOPMutationOperator;
 import com.zynaps.bioforge.schemes.SelectionScheme;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -1,6 +1,7 @@
 package com.zynaps.demo.rostering;
 
 import com.zynaps.bioforge.Island;
+
 import java.util.List;
 
 class Controller {
@@ -18,7 +19,7 @@ class Controller {
     }
 
     public List<Assignment> evolve(int seconds) {
-        final var limit = System.currentTimeMillis() + seconds * 1000;
+        final var limit = System.currentTimeMillis() + seconds * 1000L;
         var bestFitness = Double.NEGATIVE_INFINITY;
         var solutionFound = false;
         while (!solutionFound && System.currentTimeMillis() < limit) {
@@ -26,13 +27,13 @@ class Controller {
             if (population.getChampion().getFitness() != bestFitness) {
                 bestFitness = population.getChampion().getFitness();
                 solutionFound = mapper.decode(population.getChampion()).size() == totalRequired;
-                System.out.println(String.format("Mutation: %f, Crossover: %f, Generation: %d, Assignments: %d/%d, Score: %f",
-                                                 population.getMutationRate(),
-                                                 population.getCrossoverRate(),
-                                                 population.getGeneration(),
-                                                 mapper.decode(population.getChampion()).size(),
-                                                 totalRequired,
-                                                 population.getChampion().getFitness()));
+                System.out.printf("Mutation: %f, Crossover: %f, Generation: %d, Assignments: %d/%d, Score: %f%n",
+                                  population.getMutationRate(),
+                                  population.getCrossoverRate(),
+                                  population.getGeneration(),
+                                  mapper.decode(population.getChampion()).size(),
+                                  totalRequired,
+                                  population.getChampion().getFitness());
             }
         }
         return mapper.decode(population.getChampion());

@@ -3,12 +3,13 @@ package com.zynaps.bioforge.schemes;
 import com.zynaps.bioforge.CannedRandomNumber;
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.CreatureBuilder;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
-import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

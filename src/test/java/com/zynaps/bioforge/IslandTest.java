@@ -1,11 +1,12 @@
 package com.zynaps.bioforge;
 
 import com.zynaps.bioforge.generators.RandomNumberGenerator;
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;

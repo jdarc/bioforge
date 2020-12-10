@@ -61,8 +61,10 @@ class Processor {
                     registers[dst] = ((0x3FFFFF & instruction) - 0x200000) / 512.0;
                     break;
                 case 8:
+                    registers[dst] = 1024.0;
                     break;
                 case 9:
+                    registers[dst] = -1024.0;
                     break;
                 case 10:
                     registers[dst] = registers[opa] + registers[opb];
@@ -116,6 +118,7 @@ class Processor {
                     registers[dst] = Math.sqrt(Math.abs(registers[opa]));
                     break;
                 case 28:
+                    registers[dst] = Math.abs(registers[dst]);
                     break;
                 case 29:
                     registers[dst] = Math.min(registers[opa], registers[opb]);

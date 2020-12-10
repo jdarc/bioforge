@@ -1,11 +1,12 @@
 package com.zynaps.demo.equations;
 
 import com.zynaps.bioforge.Builder;
-import java.util.Arrays;
-import java.util.Random;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.util.Arrays;
+import java.util.Random;
 
 import static java.lang.Double.parseDouble;
 
@@ -49,21 +50,19 @@ class Game {
     }
 
     public String describe() {
-        return "Numbers: " + Arrays.toString(numbers) +
-               System.lineSeparator() +
-               "Target: " + target +
-               System.lineSeparator();
+        return "Numbers: " + Arrays.toString(numbers) + System.lineSeparator() + "Target: " + target + System.lineSeparator();
     }
 
     public void run() {
         engine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-        var population = new Builder().tribes(4)
-                                      .populationSize(50)
-                                      .genomeSize(32)
-                                      .crossoverRate(0.5)
-                                      .mutationRate(0.005)
-                                      .build();
+        var population = new Builder()
+            .tribes(4)
+            .populationSize(50)
+            .genomeSize(32)
+            .crossoverRate(0.5)
+            .mutationRate(0.005)
+            .build();
 
         var lastResult = 0.0;
         do {
@@ -79,12 +78,12 @@ class Game {
             var result = evaluate(formula);
             if (lastResult != result) {
                 lastResult = result;
-                System.out.println(String.format("Generation [%d]: %s = %s", population.getGeneration(), formula, result));
+                System.out.printf("Generation [%d]: %s = %s%n", population.getGeneration(), formula, result);
             }
         } while (evaluate(new Formula(population.getChampion()).toEquation(numbers)) != target);
 
         var formula = new Formula(population.getChampion()).toEquation(numbers);
-        System.out.println(String.format("Solution: %s = %s", formula, evaluate(formula)));
+        System.out.printf("Solution: %s = %s%n", formula, evaluate(formula));
     }
 
     private double evaluate(String equation) {

@@ -1,10 +1,11 @@
 package com.zynaps.demo.rostering;
 
+import org.joda.time.Hours;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.joda.time.Hours;
 
 class Rules {
 

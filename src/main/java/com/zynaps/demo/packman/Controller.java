@@ -3,35 +3,36 @@ package com.zynaps.demo.packman;
 import com.zynaps.bioforge.Builder;
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.Island;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class Controller {
 
-    private static final int NUMBER_OF_CIRCLES = 10;
+    private static final int NUMBER_OF_CIRCLES = 25;
 
     private final Island population;
     private Shape shape;
 
     public Controller() {
         population = new Builder()
-            .tribes(3)
-            .populationSize(150)
-            .genomeSize(NUMBER_OF_CIRCLES * 63)
-            .crossoverRate(0.3)
+            .tribes(5)
+            .populationSize(80)
+            .genomeSize(NUMBER_OF_CIRCLES * 126)
+            .crossoverRate(0.1)
             .mutationRate(0.002)
             .build();
         reset();
     }
 
     private static List<Circle> decode(Creature creature) {
-        var multiplier = 12.0 / 2097152.0;
+        var multiplier = 10.0 / 4398046511103.0;
         List<Circle> circles = new ArrayList<>(NUMBER_OF_CIRCLES);
         for (var i = 0; i < NUMBER_OF_CIRCLES; ++i) {
-            var dna = creature.extract(63 * i, 63);
-            var x = multiplier * ((0x1FFFFF & dna) - 0x100000);
-            var y = multiplier * ((0x1FFFFF & dna >> 21) - 0x100000);
-            var r = multiplier * ((0x1FFFFF & dna >> 42));
+            int offset = 126 * i;
+            var x = multiplier * ((0x3ffffffffffL & creature.extract(offset + 42 * 0, 42)) - 0x20000000000L);
+            var y = multiplier * ((0x3ffffffffffL & creature.extract(offset + 42 * 1, 42)) - 0x20000000000L);
+            var r = multiplier * ((0x7ffffffffffL & creature.extract(offset + 42 * 2, 42)));
             circles.add(new Circle(x, y, r));
         }
         return circles;
@@ -121,7 +122,7 @@ class Controller {
                     fitness -= circle.radius;
                 }
             }
-            return Math.max(0, fitness);
+            return fitness;
         });
     }
 }

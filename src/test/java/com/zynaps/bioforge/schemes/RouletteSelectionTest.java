@@ -4,10 +4,11 @@ import com.zynaps.bioforge.CannedRandomNumber;
 import com.zynaps.bioforge.Creature;
 import com.zynaps.bioforge.CreatureBuilder;
 import com.zynaps.bioforge.generators.RandomNumberGenerator;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
